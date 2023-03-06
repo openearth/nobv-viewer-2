@@ -71,14 +71,17 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-      <router-view/>
+      <mapbox-map />
     </v-main>
   </v-app>
 </template>
 
 <script>
+
+import MapboxMap from './components/MapboxMap'
+
 export default {
+  components: { MapboxMap },
   data: () => ({
     items: [
       ['mdi-email', 'Inbox'],
