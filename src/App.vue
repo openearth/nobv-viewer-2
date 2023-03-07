@@ -71,7 +71,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-      <mapbox-map />
+      <mapbox-map @map-clicked="appCollapsed = !appCollapsed" />
+      <app-pane :panelIsCollapsed="appCollapsed" />
     </v-main>
   </v-app>
 </template>
@@ -79,10 +80,12 @@
 <script>
 
 import MapboxMap from './components/MapboxMap'
+import AppPane from './components/AppPane'
 
 export default {
-  components: { MapboxMap },
+  components: { MapboxMap, AppPane },
   data: () => ({
+    appCollapsed: true,
     items: [
       ['mdi-email', 'Inbox'],
       ['mdi-account-supervisor-circle', 'Supervisors'],
