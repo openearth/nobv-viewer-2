@@ -81,6 +81,7 @@
 
 import MapboxMap from './components/MapboxMap'
 import AppPane from './components/AppPane'
+import { mapActions } from 'vuex'
 
 export default {
   components: { MapboxMap, AppPane },
@@ -91,6 +92,13 @@ export default {
       ['mdi-account-supervisor-circle', 'Supervisors'],
       ['mdi-clock-start', 'Clock-in']
     ]
-  })
+  }),
+  methods: {
+    ...mapActions(['getLocations'])
+  },
+  mounted () {
+    console.log('mounted loaded')
+    this.getLocations()
+  }
 }
 </script>

@@ -7,11 +7,13 @@
       id="map"
       ref="map"
     >
+      <v-mapbox-layer v-if = "layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
     </v-mapbox>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'MapboxMap',
   mounted () {
@@ -21,6 +23,9 @@ export default {
         this.$emit('map-clicked', true)
       })
     })
+  },
+  computed: {
+    ...mapState(['layerLocations'])
   }
 }
 </script>
