@@ -2,48 +2,18 @@
   <v-app>
     <div>
       <v-app-bar
-        color="#A1887F"
+        color="#AA7F4A"
         dense
         dark
       >
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Page title</v-toolbar-title>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Bodembeweging</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-
-        <v-menu
-          left
-          bottom
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item
-              v-for="n in 5"
-              :key="n"
-              @click="() => {}"
-            >
-              <v-list-item-title>Option {{ n }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <img src="./assets/Deltares_logo_D-blauw_RGB.png" alt="Deltares Logo" height="40">
       </v-app-bar>
     </div>
 
@@ -53,18 +23,15 @@
       dark
       src="./assets/subsoil-background.jpg"
       width="300"
-      permanent
+      v-model="drawer"
+      hide-overlay
     >
       <v-list>
         <v-list-item
-          v-for="([icon, text], i) in items"
+          v-for="([text], i) in items"
           :key="i"
           link
         >
-          <v-list-item-icon>
-            <v-icon>{{ icon }}</v-icon>
-          </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>{{ text }}</v-list-item-title>
           </v-list-item-content>
@@ -86,11 +53,11 @@ import { mapActions } from 'vuex'
 export default {
   components: { MapboxMap, AppPane },
   data: () => ({
+    drawer: true,
     appCollapsed: true,
     items: [
-      ['mdi-email', 'Inbox'],
-      ['mdi-account-supervisor-circle', 'Supervisors'],
-      ['mdi-clock-start', 'Clock-in']
+      ['Dataset 1'],
+      ['Dataset 2']
     ]
   }),
   methods: {
