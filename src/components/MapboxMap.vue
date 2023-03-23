@@ -3,11 +3,11 @@
     <v-mapbox
       class="mapbox-map"
       access-token="pk.eyJ1Ijoic2lnZ3lmIiwiYSI6Il8xOGdYdlEifQ.3-JZpqwUa3hydjAJFXIlMA"
-      map-style="mapbox://styles/mapbox/satellite-v9"
+      map-style="mapbox://styles/mapbox/streets-v11"
       id="map"
       ref="map"
     >
-      <v-mapbox-layer v-if = "layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
+      <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
     </v-mapbox>
   </div>
 </template>
@@ -18,21 +18,21 @@ export default {
   name: 'MapboxMap',
   mounted () {
     this.map = this.$refs.map.map
-    this.map.on('load', () => {
-      this.map.on('click', e => {
-        this.$emit('map-clicked', true)
-      })
-    })
   },
   computed: {
     ...mapState(['layerLocations'])
+  },
+  methods: {
+    pointClicked (e) {
+      this.$emit('point-clicked', e)
+    }
   }
 }
 </script>
 
 <style>
 .mapbox-map {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
 }
 </style>

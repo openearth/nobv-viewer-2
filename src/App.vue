@@ -71,7 +71,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-      <mapbox-map @map-clicked="appCollapsed = !appCollapsed" />
+      <mapbox-map @point-clicked="appCollapsed = !appCollapsed" />
       <app-pane :panelIsCollapsed="appCollapsed" />
     </v-main>
   </v-app>
