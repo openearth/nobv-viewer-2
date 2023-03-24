@@ -6,7 +6,7 @@
         dense
         dark
       >
-        <v-btn icon @click="removeRipple" class="v-btn--no-ripple">
+        <v-btn icon>
           <v-icon @click="drawer = !drawer"> mdi-arrow-left </v-icon>
         </v-btn>
         <v-toolbar-title>Bodembeweging</v-toolbar-title>
