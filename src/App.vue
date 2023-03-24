@@ -6,13 +6,9 @@
         dense
         dark
       >
-
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
         <v-toolbar-title>Bodembeweging</v-toolbar-title>
-
         <v-spacer></v-spacer>
-
         <img src="./assets/Deltares_logo_D-blauw_RGB.png" alt="Deltares Logo" height="40">
       </v-app-bar>
     </div>

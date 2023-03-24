@@ -9,7 +9,7 @@
       id="map"
       ref="map"
     >
-      <v-mapbox-navigation-control :position="'bottom-right'" />
+      <v-mapbox-navigation-control :position="'top-right'" />
       <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
     </v-mapbox>
   </div>
