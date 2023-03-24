@@ -6,8 +6,10 @@
         dense
         dark
       >
-        <v-btn icon>
-          <v-icon @click="drawer = !drawer"> mdi-arrow-left </v-icon>
+        <v-btn icon @click="toggleDrawer" class="v-btn--no-ripple">
+          <v-icon>
+            {{ icon }}
+          </v-icon>
         </v-btn>
         <v-toolbar-title>Bodembeweging</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -56,10 +58,18 @@ export default {
     items: [
       ['Dataset 1'],
       ['Dataset 2']
-    ]
+    ],
+    icon: 'mdi-arrow-left'
   }),
   methods: {
-    ...mapActions(['getLocations'])
+    ...mapActions(['getLocations']),
+    toggleDrawer () {
+      this.drawer = !this.drawer
+      this.icon =
+        this.icon === 'mdi-arrow-right'
+          ? 'mdi-arrow-left'
+          : 'mdi-arrow-right'
+    }
   },
   mounted () {
     console.log('mounted loaded')
