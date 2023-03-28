@@ -1,6 +1,6 @@
 <template>
     <div class="app-panel" :class="{ 'app-panel--collapsed': panelIsCollapsed }">
-    Hello
+      <div class="details d-flex flex-row">
       <v-btn
       v-if="!panelIsCollapsed"
       class="app-panel__minimize"
@@ -10,6 +10,15 @@
       >
         <v-icon>mdi-chevron-down</v-icon>
       </v-btn>
+      <div class="details__column">
+        <h3 class="text-h6">
+          Details meetlocatie
+        </h3>
+
+        <location-details />
+
+      </div>
+      </div>
     </div>
 </template>
 
