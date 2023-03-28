@@ -23,9 +23,11 @@ export default new Vuex.Store({
         type: 'circle',
         layout: {},
         paint: {
+          'circle-color': '#E41c1f',
           'circle-radius': 5,
-          'circle-opacity': 0.7,
-          'circle-color': '#54b04a'
+          'circle-stroke-width': 5,
+          'circle-stroke-color': '#000',
+          'circle-stroke-opacity': 0.5
         }
       }
       state.layerLocations = pointLayer
