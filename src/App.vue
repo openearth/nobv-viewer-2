@@ -39,7 +39,7 @@
       </v-list>
     </v-navigation-drawer>
       <mapbox-map @point-clicked="appCollapsed = !appCollapsed" />
-      <app-pane :panelIsCollapsed="appCollapsed" />
+      <app-pane :panelIsCollapsed="appCollapsed" @update:panelIsCollapsed="appCollapsed = $event" />
     </v-main>
   </v-app>
 </template>

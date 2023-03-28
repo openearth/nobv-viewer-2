@@ -1,15 +1,15 @@
 <template>
     <div class="app-panel" :class="{ 'app-panel--collapsed': panelIsCollapsed }">
-        Hello
-        <v-btn
-        v-if="!panelIsCollapsed"
-        class="app-panel__minimize"
-        icon
-        title="Minimaliseer"
-        @click="onClick"
-        >
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
+    Hello
+      <v-btn
+      v-if="!panelIsCollapsed"
+      class="app-panel__minimize"
+      icon
+      title="Minimaliseer"
+      @click="$emit('update:panelIsCollapsed', !panelIsCollapsed)"
+      >
+        <v-icon>mdi-chevron-down</v-icon>
+      </v-btn>
     </div>
 </template>
 
