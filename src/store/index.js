@@ -5,6 +5,8 @@ import wps from '../lib/wps'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  namespaced: true,
+
   state: {
     locations: {},
     layerLocations: {}

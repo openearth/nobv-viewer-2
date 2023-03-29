@@ -23,8 +23,12 @@
 </template>
 
 <script>
+
+import LocationDetails from './LocationDetails'
+
 export default {
   name: 'AppPane',
+  components: { LocationDetails },
   props: {
     panelIsCollapsed: {
       type: Boolean,
