@@ -33,7 +33,8 @@ export default {
   },
   methods: {
     pointClicked (e) {
-      this.$emit('point-clicked', e)
+      console.log('when point clicked the event retursn', e)
+      this.$emit('point-clicked', e.features)
     }
   }
 }

@@ -22,12 +22,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'LocationDetails',
+  data () {
+    return {
+
+      activeLocation: {
+        properties: {
+          loc_id: 5,
+          meanhead: 'test'
+        },
+        geometry: {
+          coordinates: [6.023, 3.6]
+        }
+
+      }
+    }
+  },
   computed: {
-    ...mapGetters('locations', ['activeLocation']),
+    // ...mapGetters('locations', ['activeLocation']),
     id () {
       return this.activeLocation.properties.loc_id
     },
