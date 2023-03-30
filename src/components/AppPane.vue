@@ -10,14 +10,23 @@
       >
         <v-icon>mdi-chevron-down</v-icon>
       </v-btn>
+
       <div class="details__column">
         <h3 class="text-h6">
           Details meetlocatie
         </h3>
-
         <location-details />
-
+        <v-divider class="my-8" />
+        <level-details />
       </div>
+
+      <div class="details__column">
+        <h3 class="text-h6">
+          Timeseries voor {{ id }}
+        </h3>
+        <area-chart v-if="showChart" />
+      </div>
+
       </div>
     </div>
 </template>
