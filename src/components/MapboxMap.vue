@@ -34,7 +34,8 @@ export default {
   methods: {
     pointClicked (e) {
       console.log('when point clicked the event retursn', e)
-      this.$emit('point-clicked', e.features)
+      const point = { lngLat: e.lngLat, properties: e.features[0].properties }
+      this.$emit('point-clicked', point)
     }
   }
 }

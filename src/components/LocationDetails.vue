@@ -1,6 +1,6 @@
 <template>
   <div class="location-details">
-    <v-simple-table v-if="activeLocation">
+    <v-simple-table>
       <template v-slot:default>
         <tbody>
           <tr>
@@ -22,35 +22,25 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 
 export default {
   name: 'LocationDetails',
-  data () {
-    return {
-
-      activeLocation: {
-        properties: {
-          loc_id: 5,
-          meanhead: 'test'
-        },
-        geometry: {
-          coordinates: [6.023, 3.6]
-        }
-
-      }
-    }
-  },
   computed: {
-    // ...mapGetters('locations', ['activeLocation']),
+
     id () {
-      return this.activeLocation.properties.loc_id
+      return this.pointSelected.properties.loc_id
     },
     coordinates () {
-      return this.activeLocation.geometry.coordinates
+      return this.pointSelected.geometry.coordinates
     },
     meanhead () {
-      return this.activeLocation.properties.meanhead
+      return this.pointSelected.properties.meanhead
+    }
+  },
+  props: {
+    pointSelected: {
+      type: Object,
+      default: () => ({})
     }
   }
 }

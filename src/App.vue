@@ -38,8 +38,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-      <mapbox-map @point-clicked="appCollapsed = !appCollapsed" />
-      <app-pane :panelIsCollapsed="appCollapsed" @update:panelIsCollapsed="appCollapsed = $event" />
+      <mapbox-map @point-clicked="onPointClicked" />
+      <app-pane :panelIsCollapsed="appCollapsed" :pointSelected="point" @update:panelIsCollapsed="appCollapsed = $event" />
     </v-main>
   </v-app>
 </template>
@@ -59,7 +59,8 @@ export default {
       ['Dataset 1'],
       ['Dataset 2']
     ],
-    icon: 'mdi-arrow-left'
+    icon: 'mdi-arrow-left',
+    point: null
   }),
   methods: {
     ...mapActions(['getLocations']),
@@ -69,6 +70,11 @@ export default {
         this.icon === 'mdi-arrow-right'
           ? 'mdi-arrow-left'
           : 'mdi-arrow-right'
+    },
+    onPointClicked (point) {
+      console.log(point)
+      this.appCollapsed = !this.appCollapsed
+      this.point = point
     }
   },
   mounted () {
