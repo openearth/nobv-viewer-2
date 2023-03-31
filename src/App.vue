@@ -72,9 +72,10 @@ export default {
           : 'mdi-arrow-right'
     },
     onPointClicked (point) {
-      console.log(point)
-      this.appCollapsed = !this.appCollapsed
       this.point = point
+      if (this.appCollapsed) {
+        this.appCollapsed = !this.appCollapsed
+      }
     }
   },
   mounted () {
