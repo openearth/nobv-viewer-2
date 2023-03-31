@@ -14,9 +14,15 @@
         <h3 class="text-h6">
           Details meetlocatie
         </h3>
+<<<<<<< Updated upstream
 
         <location-details />
 
+=======
+        <location-details :pointSelected="pointSelected" />
+        <v-divider class="my-8" />
+        <level-details />
+>>>>>>> Stashed changes
       </div>
       </div>
     </div>
@@ -33,6 +39,10 @@ export default {
     panelIsCollapsed: {
       type: Boolean,
       default: false
+    },
+    pointSelected: {
+      type: Object,
+      default: () => ({})
     }
   }
 }
