@@ -17,7 +17,7 @@
         </h3>
         <location-details :pointSelected="pointSelected" />
         <v-divider class="my-8" />
-        <level-details />
+        <!-- <level-details /> -->
       </div>
 
       <div class="details__column">
@@ -51,7 +51,7 @@
 
       </v-tabs>
     </v-card>
-        <area-chart v-if="showChart" />
+        <!-- <area-chart v-if="showChart" /> -->
       </div>
 
       </div>
@@ -73,6 +73,11 @@ export default {
     pointSelected: {
       type: Object,
       default: () => ({})
+    }
+  },
+  computed: {
+    id () {
+      return this.pointSelected?.properties.loc_id
     }
   }
 }
