@@ -9,7 +9,7 @@
           </tr>
           <tr>
             <td>Coördinaten</td>
-            <td>Lng: {{ coordinates[0] }} - Lat: {{ coordinates[1] }}</td>
+            <td>Lng: {{ coordinates.lng }} - Lat: {{ coordinates.lat }}</td>
           </tr>
           <tr>
             <td>Gemiddelde</td>
@@ -31,7 +31,7 @@ export default {
       return this.pointSelected.properties.loc_id
     },
     coordinates () {
-      return this.pointSelected.geometry.coordinates
+      return this.pointSelected.lngLat
     },
     meanhead () {
       return this.pointSelected.properties.meanhead
