@@ -41,6 +41,8 @@
           <h3 class="text-h6">
             Timeseries voor {{ id }}
           </h3>
+      <v-chart :option="chartOptions" />
+
       </v-tab-item>
 
       <v-tab-item>
@@ -53,7 +55,6 @@
     </v-card>
         <!-- <area-chart v-if="showChart" /> -->
       </div>
-      <v-chart :option="chartOptions" />
       </div>
     </div>
 </template>
