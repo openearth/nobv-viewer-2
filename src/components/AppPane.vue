@@ -21,9 +21,36 @@
       </div>
 
       <div class="details__column">
+        <v-card>
+    <v-tabs
+      background-color="#AA7F4A"
+      center-active
+      dark
+    >
+      <v-tab>Pictures</v-tab>
+      <v-tab>Elevation</v-tab>
+      <v-tab>Water Quality</v-tab>
+
+    <v-tab-item>
+        <h3 class="text-h6">
+          Pictures
+        </h3>
+    </v-tab-item>
+
+    <v-tab-item>
         <h3 class="text-h6">
           Timeseries voor {{ id }}
         </h3>
+    </v-tab-item>
+
+    <v-tab-item>
+        <h3 class="text-h6">
+          Pictures
+        </h3>
+    </v-tab-item>
+
+    </v-tabs>
+  </v-card>
         <area-chart v-if="showChart" />
       </div>
 
@@ -72,5 +99,32 @@ export default {
   top: 0;
   right: 0;
   margin: 8px;
+}
+
+.details {
+  gap: 24px;
+  height: 100%;
+  padding: 52px 0;
+  overflow: hidden;
+}
+
+.details__column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 24px;
+  overflow: auto;
+}
+
+.details__column .text-h6 {
+  margin-bottom: 16px;
+}
+
+.details__column:first-child {
+  flex: 0 0 600px;
+}
+
+.details__column:last-child {
+  flex: 1 1 auto;
 }
 </style>
