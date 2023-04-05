@@ -9,7 +9,19 @@ export default new Vuex.Store({
 
   state: {
     locations: {},
-    layerLocations: {}
+    layerLocations: {},
+    selectedArea: null,
+    areas: [{
+      name: 'Dataset 1',
+      zoom: 10,
+      center: [4.755652, 52.486396]
+    },
+    {
+      name: 'Dataset 2',
+      zoom: 10,
+      center: [5.935102, 53.060563]
+    }
+    ]
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
@@ -33,6 +45,9 @@ export default new Vuex.Store({
         }
       }
       state.layerLocations = pointLayer
+    },
+    SET_SELECTED_AREA (state, area) {
+      state.selectedArea = area
     }
   },
   actions: {

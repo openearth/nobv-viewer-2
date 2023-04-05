@@ -28,12 +28,13 @@
     >
       <v-list>
         <v-list-item
-          v-for="([text], i) in items"
+          v-for="(area, i) in areas"
           :key="i"
           link
+          @click="handleAreaClick(area)"
         >
           <v-list-item-content>
-            <v-list-item-title>{{ text }}</v-list-item-title>
+            <v-list-item-title>{{ area.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -55,13 +56,15 @@ export default {
   data: () => ({
     drawer: true,
     appCollapsed: true,
-    items: [
-      ['Dataset 1'],
-      ['Dataset 2']
-    ],
+
     icon: 'mdi-arrow-left',
     point: null
   }),
+  computed: {
+    areas () {
+      return this.$store.state.areas
+    }
+  },
   methods: {
     ...mapActions(['getLocations']),
     toggleDrawer () {
@@ -76,6 +79,9 @@ export default {
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
+    },
+    handleAreaClick (area) {
+      this.$store.commit('SET_SELECTED_AREA', area)
     }
   },
   mounted () {

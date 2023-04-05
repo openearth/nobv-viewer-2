@@ -29,7 +29,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['layerLocations'])
+    ...mapState(['layerLocations']),
+    selectedArea () {
+      return this.$store.state.selectedArea
+    }
+  },
+  watch: {
+    selectedArea (value) {
+      this.map.flyTo({ center: value.center, zoom: value.zoom })
+    }
   },
   methods: {
     pointClicked (e) {
