@@ -38,7 +38,7 @@ export default new Vuex.Store({
   actions: {
     async getLocations ({ commit }) {
       const locations = await wps({
-        identifier: 'wps_read_gwslocations',
+        identifier: 'nobv_wps_read_locations',
         outputName: 'jsonstations'
       })
       if (locations.errMsg) {
