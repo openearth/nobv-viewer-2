@@ -11,21 +11,14 @@ export default new Vuex.Store({
     locations: {},
     layerLocations: {},
     selectedArea: null,
-    areas: [{
-      name: 'Dataset 1',
-      zoom: 10,
-      center: [4.755652, 52.486396]
-    },
-    {
-      name: 'Dataset 2',
-      zoom: 10,
-      center: [5.935102, 53.060563]
-    }
-    ]
+    areas: []
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
       state.locations = locations
+    },
+    SET_AREAS (state, areas) {
+      state.areas = areas
     },
     SET_LAYER_LOCATIONS (state, featureCollection) {
       const pointLayer = {
@@ -62,6 +55,21 @@ export default new Vuex.Store({
         commit('SET_LOCATIONS', locations)
         commit('SET_LAYER_LOCATIONS', locations)
       }
+    },
+    async getAreas ({ commit }) {
+      // for the moment you don't have a request to do
+      const areas = [{
+        name: 'Dataset 1',
+        zoom: 10,
+        center: [4.755652, 52.486396]
+      },
+      {
+        name: 'Dataset 2',
+        zoom: 10,
+        center: [5.935102, 53.060563]
+      }
+      ]
+      commit('SET_AREAS', areas)
     }
   },
   modules: {

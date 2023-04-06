@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getLocations']),
+    ...mapActions(['getLocations', 'getAreas']),
     toggleDrawer () {
       this.drawer = !this.drawer
       this.icon =
@@ -87,6 +87,7 @@ export default {
   mounted () {
     console.log('mounted loaded')
     this.getLocations()
+    this.getAreas()
   }
 }
 </script>
