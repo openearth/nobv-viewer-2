@@ -34,7 +34,7 @@ export default {
       return this.pointSelected?.lngLat
     },
     meanhead () {
-      return this.pointSelected?.properties.meanhead
+      return this.pointSelected?.properties.mean_head
     }
   },
   props: {

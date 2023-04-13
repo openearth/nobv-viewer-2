@@ -36,7 +36,12 @@ export default {
   },
   watch: {
     selectedArea (value) {
-      this.map.flyTo({ center: value.center, zoom: value.zoom })
+      this.map.fitBounds([
+        [value.bbox[0], value.bbox[1]],
+        [value.bbox[2], value.bbox[3]]
+      ],
+      { padding: 200 }
+      )
     }
   },
   methods: {

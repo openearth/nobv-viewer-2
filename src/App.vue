@@ -34,7 +34,7 @@
           @click="handleAreaClick(area)"
         >
           <v-list-item-content>
-            <v-list-item-title>{{ area.name }}</v-list-item-title>
+            <v-list-item-title>{{ area.properties.groupname }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
