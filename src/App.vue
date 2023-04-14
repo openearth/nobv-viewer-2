@@ -58,7 +58,7 @@ export default {
     appCollapsed: true,
 
     icon: 'mdi-arrow-left',
-    point: null
+    point: null // TODO: instead of a data, move it to state. Mutate it every time you click  a new point
   }),
   computed: {
     areas () {
@@ -75,10 +75,11 @@ export default {
           : 'mdi-arrow-right'
     },
     onPointClicked (point) {
-      this.point = point
+      this.point = point // This is where you will be calling the mutation or action
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
+      this.getTimeseries() // check
     },
     handleAreaClick (area) {
       this.$store.commit('SET_SELECTED_AREA', area)

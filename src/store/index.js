@@ -64,6 +64,24 @@ export default new Vuex.Store({
       }))
       const areasData = await response.json()
       commit('SET_AREAS', areasData.features)
+    },
+    async getTimeseries ({ commit, state }) {
+      const jsonData = {
+        locid: state.point.properties.id, // check it
+        paramter: 'Grondwaterstand'
+      }
+
+      const timeseries = await wps({
+        identifier: 'nobv_wps_gettimeseries',
+        outputName: 'jsonstimeseries',
+        functionid: 'locationinfo',
+        data: JSON.stringify(jsonData)
+      })
+      if (timeseries.errMsg) {
+        // console.log(locations.errMsg)
+      } else {
+        console.log(timeseries)
+      }
     }
   },
   modules: {

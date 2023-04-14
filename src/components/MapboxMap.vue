@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MapboxMap',
   mounted () {
@@ -45,6 +45,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getTimeseries']),
     pointClicked (e) {
       console.log('when point clicked the event retursn', e)
       const point = { lngLat: e.lngLat, properties: e.features[0].properties }
