@@ -41,7 +41,7 @@
           <h3 class="text-h6">
             Timeseries voor {{ id }}
           </h3>
-      <v-chart :option="chartOptions" />
+      <v-chart :option="chartOptions" class="chart" />
 
       </v-tab-item>
 
@@ -64,6 +64,20 @@ import 'echarts'
 import VChart from 'vue-echarts'
 import LocationDetails from './LocationDetails'
 
+let base = +new Date(1988, 9, 3)
+const oneDay = 24 * 3600 * 1000
+const data = [[base, Math.random() * 300]]
+for (let i = 1; i < 20000; i++) {
+  const now = new Date((base += oneDay))
+  data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
+}
+//  do something like this here too to import the timeseries data
+// computed: {
+//   areas () {
+//     return this.$store.state.areas
+//   }
+// }
+
 export default {
   name: 'AppPane',
   components: { LocationDetails, VChart },
@@ -80,48 +94,52 @@ export default {
   data () {
     return {
       chartOptions: {
-        textStyle: {
-          fontFamily: 'Inter, "Helvetica Neue", Arial, sans-serif'
+        tooltip: {
+          trigger: 'axis',
+          position: function (pt) {
+            return [pt[0], '10%']
+          }
         },
         title: {
-          text: 'Traffic Sources',
-          left: 'center'
+          left: 'center',
+          text: 'Large Ara Chart'
         },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+          }
         },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: [
-            'Direct',
-            'Email',
-            'Ad Networks',
-            'Video Ads',
-            'Search Engines'
-          ]
+        xAxis: {
+          type: 'time',
+          boundaryGap: false
         },
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '100%']
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 20
+          },
+          {
+            start: 0,
+            end: 20
+          }
+        ],
         series: [
           {
-            name: 'Traffic Sources',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: [
-              { value: 335, name: 'Direct' },
-              { value: 310, name: 'Email' },
-              { value: 234, name: 'Ad Networks' },
-              { value: 135, name: 'Video Ads' },
-              { value: 1548, name: 'Search Engines' }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
+            name: 'Fake Data',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            areaStyle: {},
+            data: data // this is where the data is passed
           }
         ]
       }
@@ -187,5 +205,9 @@ export default {
 
 .details__column:last-child {
   flex: 1 1 auto;
+}
+
+.chart {
+  height: 400px;
 }
 </style>

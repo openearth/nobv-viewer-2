@@ -80,7 +80,7 @@ export default {
         this.appCollapsed = !this.appCollapsed
       }
       console.log(point)
-      this.getTimeseries(point.properties.loc_id) // check
+      this.getTimeseries(point.properties.loc_id)
     },
     handleAreaClick (area) {
       this.$store.commit('SET_SELECTED_AREA', area)
