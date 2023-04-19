@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getLocations', 'getAreas']),
+    ...mapActions(['getLocations', 'getAreas', 'getTimeseries']),
     toggleDrawer () {
       this.drawer = !this.drawer
       this.icon =
@@ -79,7 +79,8 @@ export default {
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
-      this.getTimeseries() // check
+      console.log(point)
+      this.getTimeseries(point.properties.loc_id) // check
     },
     handleAreaClick (area) {
       this.$store.commit('SET_SELECTED_AREA', area)

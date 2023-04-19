@@ -12,7 +12,8 @@ export default new Vuex.Store({
     locations: {},
     layerLocations: {},
     selectedArea: null,
-    areas: []
+    areas: [],
+    timeSeries: null
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     SET_SELECTED_AREA (state, area) {
       state.selectedArea = area
+    },
+    SET_TIMESERIES (state, timeSeries) {
+      state.timeSeries = timeSeries
     }
   },
   actions: {
@@ -65,22 +69,23 @@ export default new Vuex.Store({
       const areasData = await response.json()
       commit('SET_AREAS', areasData.features)
     },
-    async getTimeseries ({ commit, state }) {
+    async getTimeseries ({ commit, state }, id) {
       const jsonData = {
-        locid: state.point.properties.id, // check it
-        paramter: 'Grondwaterstand'
+        locid: id, // check it
+        parameter: 'Grondwaterstand'
       }
-
-      const timeseries = await wps({
+      commit('SET_TIMESERIES', null)
+      const timeSeries = await wps({
         identifier: 'nobv_wps_gettimeseries',
         outputName: 'jsonstimeseries',
         functionid: 'locationinfo',
         data: JSON.stringify(jsonData)
       })
-      if (timeseries.errMsg) {
+      if (timeSeries.errMsg) {
         // console.log(locations.errMsg)
       } else {
-        console.log(timeseries)
+        // console.log(timeSeries)
+        commit('SET_TIMESERIES', timeSeries)
       }
     }
   },
