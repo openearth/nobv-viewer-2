@@ -75,7 +75,7 @@ export default {
           : 'mdi-arrow-right'
     },
     onPointClicked (point) {
-      this.point = point // This is where you will be calling the mutation or action
+      this.point = point // This is where I will be calling the mutation or action
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }

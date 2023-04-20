@@ -48,6 +48,22 @@ export default new Vuex.Store({
       state.timeSeries = timeSeries
     }
   },
+  getters: {
+    timeSeries (state) {
+      console.log('in Getter')
+      const data = []
+      const { timeseries } = state.timeSeries
+      timeseries.forEach(element => {
+        console.log(element)
+        // const {datetime, head} = element
+        // const date = new Date(datetime)
+        //TODO: push in the data array each time an array [date, head]
+        // data = [...data, [date, head]]
+      })
+      return data
+    }
+
+  },
   actions: {
     async getLocations ({ commit }) {
       const locations = await wps({

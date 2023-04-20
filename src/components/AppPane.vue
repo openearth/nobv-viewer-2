@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import 'echarts'
 import VChart from 'vue-echarts'
 import LocationDetails from './LocationDetails'
@@ -71,6 +72,10 @@ for (let i = 1; i < 20000; i++) {
   const now = new Date((base += oneDay))
   data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
 }
+console.log(data)
+
+// data[date in new Date format, id]
+
 //  do something like this here too to import the timeseries data
 // computed: {
 //   areas () {
@@ -89,6 +94,11 @@ export default {
     pointSelected: {
       type: Object,
       default: () => ({})
+    }
+  },
+  watch: {
+    timeSeries () {
+      console.log(this.timeSeries)
     }
   },
   data () {
@@ -139,13 +149,14 @@ export default {
             smooth: true,
             symbol: 'none',
             areaStyle: {},
-            data: data // this is where the data is passed
+            data: this.timeSeries // this is where the data is passed
           }
         ]
       }
     }
   },
   computed: {
+    ...mapGetters(['timeSeries']),
     id () {
       return this.pointSelected?.properties.loc_id
     }
