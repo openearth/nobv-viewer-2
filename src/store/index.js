@@ -52,17 +52,17 @@ export default new Vuex.Store({
     timeSeries (state) {
       console.log('in Getter')
       const data = []
-      const { timeseries } = state.timeSeries
-      timeseries.forEach(element => {
-        console.log(element)
-        // const {datetime, head} = element
-        // const date = new Date(datetime)
-        //TODO: push in the data array each time an array [date, head]
-        // data = [...data, [date, head]]
-      })
+      if (state.timeSeries && state.timeSeries.timeseries) {
+        const { timeseries } = state.timeSeries
+        timeseries.forEach(element => {
+          console.log(element)
+          const { datetime, head } = element
+          const date = new Date(datetime)
+          data.push([date, head])
+        })
+      }
       return data
     }
-
   },
   actions: {
     async getLocations ({ commit }) {
