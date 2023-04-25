@@ -11,12 +11,27 @@
     >
       <v-mapbox-navigation-control :position="'top-right'" />
       <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
+      <div class="menu">
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
+        <!-- See a list of Mapbox-hosted public styles at -->
+        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        <label for="satellite-streets-v12">satellite streets</label>
+        <input id="light-v11" type="radio" name="rtoggle" value="light">
+        <label for="light-v11">light</label>
+        <input id="dark-v11" type="radio" name="rtoggle" value="dark">
+        <label for="dark-v11">dark</label>
+        <input id="streets-v12" type="radio" name="rtoggle" value="streets">
+        <label for="streets-v12">streets</label>
+        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
+        <label for="outdoors-v12">outdoors</label>
+      </div>
     </v-mapbox>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'MapboxMap',
   mounted () {
@@ -42,6 +57,17 @@ export default {
       ],
       { padding: 320 }
       )
+    },
+    mounted () {
+      const layerList = document.getElementById('menu')
+      const inputs = layerList.getElementsByTagName('input')
+
+      for (const input of inputs) {
+        input.onclick = (layer) => {
+          const layerId = layer.target.id
+          this.$refs.map.mapObject.setStyle('mapbox://styles/mapbox/' + layerId)
+        }
+      }
     }
   },
   methods: {
@@ -60,4 +86,12 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+.menu {
+position: absolute;
+background: #efefef;
+padding: 100px;
+font-family: 'Open Sans', sans-serif;
+}
+
 </style>
