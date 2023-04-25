@@ -24,8 +24,8 @@ export default {
   },
   data () {
     return {
-      mapCenter: [4.6, 52.435],
-      mapZoom: 12
+      mapCenter: [5.4, 52.7],
+      mapZoom: 8.7
     }
   },
   computed: {
@@ -40,7 +40,7 @@ export default {
         [value.bbox[0], value.bbox[1]],
         [value.bbox[2], value.bbox[3]]
       ],
-      { padding: 200 }
+      { padding: 320 }
       )
     }
   },
