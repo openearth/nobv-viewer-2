@@ -55,7 +55,6 @@ export default new Vuex.Store({
       if (state.timeSeries && state.timeSeries.timeseries) {
         const { timeseries } = state.timeSeries
         timeseries.forEach(element => {
-          console.log(element)
           const { datetime, head } = element
           const date = new Date(datetime)
           data.push([date, head])

@@ -65,24 +65,6 @@ import 'echarts'
 import VChart from 'vue-echarts'
 import LocationDetails from './LocationDetails'
 
-let base = +new Date(1988, 9, 3)
-const oneDay = 24 * 3600 * 1000
-const data = [[base, Math.random() * 300]]
-for (let i = 1; i < 20000; i++) {
-  const now = new Date((base += oneDay))
-  data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
-}
-console.log(data)
-
-// data[date in new Date format, id]
-
-//  do something like this here too to import the timeseries data
-// computed: {
-//   areas () {
-//     return this.$store.state.areas
-//   }
-// }
-
 export default {
   name: 'AppPane',
   components: { LocationDetails, VChart },
@@ -99,6 +81,7 @@ export default {
   watch: {
     timeSeries () {
       console.log(this.timeSeries)
+      this.renderChart()
     }
   },
   data () {
@@ -159,6 +142,12 @@ export default {
     ...mapGetters(['timeSeries']),
     id () {
       return this.pointSelected?.properties.loc_id
+    }
+  },
+  methods: {
+    renderChart () {
+      console.log('rendering')
+      this.chartOptions.series[0].data = this.timeSeries
     }
   }
 }
