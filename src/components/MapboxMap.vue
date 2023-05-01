@@ -3,7 +3,7 @@
     <v-mapbox
       class="mapbox-map"
       access-token="pk.eyJ1Ijoic2lnZ3lmIiwiYSI6Il8xOGdYdlEifQ.3-JZpqwUa3hydjAJFXIlMA"
-      map-style="mapbox://styles/mapbox/streets-v11"
+      :map-style="styleUrl"
       :center="mapCenter"
       :zoom="mapZoom"
       id="map"
@@ -11,21 +11,19 @@
     >
       <v-mapbox-navigation-control :position="'top-right'" />
       <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
+    </v-mapbox>
       <div class="menu">
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked">
-        <!-- See a list of Mapbox-hosted public styles at -->
-        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite-streets-v12" v-model="mapStyle" >
         <label for="satellite-streets-v12">satellite streets</label>
-        <input id="light-v11" type="radio" name="rtoggle" value="light">
+        <input id="light-v11" type="radio" name="rtoggle" value="light-v11" v-model="mapStyle">
         <label for="light-v11">light</label>
-        <input id="dark-v11" type="radio" name="rtoggle" value="dark">
+        <input id="dark-v11" type="radio" name="rtoggle" value="dark-v11" v-model="mapStyle">
         <label for="dark-v11">dark</label>
-        <input id="streets-v12" type="radio" name="rtoggle" value="streets">
+        <input id="streets-v12" type="radio" name="rtoggle" value="streets-v12" v-model="mapStyle">
         <label for="streets-v12">streets</label>
-        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
+        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors-v12" v-model="mapStyle">
         <label for="outdoors-v12">outdoors</label>
       </div>
-    </v-mapbox>
   </div>
 </template>
 
@@ -40,13 +38,17 @@ export default {
   data () {
     return {
       mapCenter: [5.4, 52.7],
-      mapZoom: 8.7
+      mapZoom: 8.7,
+      mapStyle: 'streets-v12'
     }
   },
   computed: {
     ...mapState(['layerLocations']),
     selectedArea () {
       return this.$store.state.selectedArea
+    },
+    styleUrl () {
+      return `mapbox://styles/mapbox/${this.mapStyle}`
     }
   },
   watch: {
@@ -57,17 +59,6 @@ export default {
       ],
       { padding: 320 }
       )
-    },
-    mounted () {
-      const layerList = document.getElementById('menu')
-      const inputs = layerList.getElementsByTagName('input')
-
-      for (const input of inputs) {
-        input.onclick = (layer) => {
-          const layerId = layer.target.id
-          this.$refs.map.mapObject.setStyle('mapbox://styles/mapbox/' + layerId)
-        }
-      }
     }
   },
   methods: {
@@ -90,8 +81,10 @@ export default {
 .menu {
 position: absolute;
 background: #efefef;
-padding: 100px;
+padding: 10px;
 font-family: 'Open Sans', sans-serif;
+top: 0;
+left: 0
 }
 
 </style>
