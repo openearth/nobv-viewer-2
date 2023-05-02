@@ -27,28 +27,20 @@
         center-active
         dark
       >
-        <v-tab>Pictures</v-tab>
-        <v-tab>Elevation</v-tab>
-        <v-tab>Water Quality</v-tab>
+        <v-tab>Foto's</v-tab>
+        <v-tab>Waterstand</v-tab>
 
-      <v-tab-item>
+      <v-tab-item style="margin: 10px">
           <h3 class="text-h6">
-            Pictures
+            Foto's
           </h3>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item style="margin: 10px">
           <h3 class="text-h6">
-            Timeseries voor {{ id }}
+            Tijdreeks voor {{ id }}
           </h3>
       <v-chart :option="chartOptions" class="chart" />
-
-      </v-tab-item>
-
-      <v-tab-item>
-          <h3 class="text-h6">
-            Pictures
-          </h3>
       </v-tab-item>
 
       </v-tabs>
@@ -93,10 +85,6 @@ export default {
             return [pt[0], '10%']
           }
         },
-        title: {
-          left: 'center',
-          text: 'Large Ara Chart'
-        },
         toolbox: {
           feature: {
             dataZoom: {
@@ -108,31 +96,90 @@ export default {
         },
         xAxis: {
           type: 'time',
-          boundaryGap: false
+          boundaryGap: false,
+          axisLabel: {
+            formatter: '{yyyy}/{MM}/{dd}',
+            rotate: -20
+          },
+          offset: 5
         },
         yAxis: {
           type: 'value',
-          boundaryGap: [0, '100%']
+          min: function (value) {
+            return Math.ceil(value.min - (value.max - value.min) / 2)
+          },
+          max: function (value) {
+            return Math.ceil(value.max + (value.max - value.min) / 2)
+          },
+          boundaryGap: [0, '100%'],
+          axisLabel: {
+            showMinLabel: true,
+            showMaxLabel: true
+          }
         },
         dataZoom: [
           {
             type: 'inside',
             start: 0,
-            end: 20
+            end: 100
           },
           {
             start: 0,
-            end: 20
+            end: 100,
+            top: '85%'
           }
         ],
+        grid: {
+          top: '50px',
+          right: '40px',
+          bottom: '70px',
+          left: '16px',
+          containLabel: true,
+          backgroundColor: '#fff'
+        },
         series: [
           {
-            name: 'Fake Data',
+            name: 'Slootwaterstand',
             type: 'line',
             smooth: true,
             symbol: 'none',
-            areaStyle: {},
-            data: this.timeSeries // this is where the data is passed
+            areaStyle: {
+              color: 'rgba(0, 0, 0, 0)'
+            },
+            data: this.timeSeries,
+            markPoint: {
+              data: [
+                {
+                  label: {
+                    color: '#373737',
+                    textBorderColor: 'none',
+                    offset: [0, -15]
+                  },
+                  name: 'Max',
+                  symbolOffset: [0, -5],
+                  symbolRotate: 180,
+                  type: 'max'
+                },
+                {
+                  label: {
+                    color: '#373737',
+                    textBorderColor: 'none',
+                    offset: [0, 15]
+                  },
+                  name: 'Min',
+                  symbolOffset: [0, 5],
+                  type: 'min'
+                }
+              ],
+              emphasis: {
+                disabled: true
+              },
+              itemStyle: {
+                color: '#373737'
+              },
+              symbol: 'arrow',
+              symbolSize: '10'
+            }
           }
         ]
       }
