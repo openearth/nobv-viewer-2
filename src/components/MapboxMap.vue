@@ -19,6 +19,9 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MapboxMap',
+  props: {
+    pointSelected: { type: Object, default: null }
+  },
   mounted () {
     this.map = this.$refs.map.map
   },
@@ -42,6 +45,14 @@ export default {
       ],
       { padding: 320 }
       )
+    },
+    pointSelected (value) {
+      console.log(value)
+      // this.map.setFeatureState({
+      //   source: 'locations',
+      //   sourceLayer: "locations",
+      //   id: HERE
+      // })
     }
   },
   methods: {
