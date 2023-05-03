@@ -2,7 +2,7 @@
   <div class="mapbox-map">
     <v-mapbox
       class="mapbox-map"
-      access-token="pk.eyJ1Ijoic2lnZ3lmIiwiYSI6Il8xOGdYdlEifQ.3-JZpqwUa3hydjAJFXIlMA"
+      :access-token="accessToken"
       map-style="mapbox://styles/mapbox/streets-v11"
       :center="mapCenter"
       :zoom="mapZoom"
