@@ -25,7 +25,8 @@ export default {
   data () {
     return {
       mapCenter: [5.4, 52.7],
-      mapZoom: 8.7
+      mapZoom: 8.7,
+      accessToken: process.env.VUE_APP_MAPBOX_TOKEN
     }
   },
   computed: {
