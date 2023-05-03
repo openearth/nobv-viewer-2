@@ -27,20 +27,20 @@
         center-active
         dark
       >
-        <v-tab>Foto's</v-tab>
         <v-tab>Waterstand</v-tab>
-
-      <v-tab-item style="margin: 10px">
-          <h3 class="text-h6">
-            Foto's
-          </h3>
-      </v-tab-item>
+        <v-tab>Foto's</v-tab>
 
       <v-tab-item style="margin: 10px">
           <h3 class="text-h6">
             Tijdreeks voor {{ id }}
           </h3>
       <v-chart :option="chartOptions" class="chart" />
+      </v-tab-item>
+
+      <v-tab-item style="margin: 10px">
+          <h3 class="text-h6">
+            Foto's
+          </h3>
       </v-tab-item>
 
       </v-tabs>
