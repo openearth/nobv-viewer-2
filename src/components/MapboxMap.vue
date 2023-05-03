@@ -3,7 +3,7 @@
     <v-mapbox
       class="mapbox-map"
       access-token="pk.eyJ1Ijoic2lnZ3lmIiwiYSI6Il8xOGdYdlEifQ.3-JZpqwUa3hydjAJFXIlMA"
-      :map-style="styleUrl"
+      map-style="mapbox://styles/mapbox/streets-v12"
       :center="mapCenter"
       :zoom="mapZoom"
       id="map"
@@ -59,6 +59,9 @@ export default {
       ],
       { padding: 320 }
       )
+    },
+    styleUrl (value) {
+      this.map.setStyle(value)
     }
   },
   methods: {
