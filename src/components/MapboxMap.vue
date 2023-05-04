@@ -10,17 +10,27 @@
       ref="map"
     >
       <v-mapbox-navigation-control :position="'top-right'" />
-      <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
+      <v-mapbox-layer
+        @click="pointClicked"
+        v-if="layerLocations"
+        :options="layerLocations"
+        :clickable="true"
+      ></v-mapbox-layer>
+      <v-mapbox-point-highlight v-if="layerLocations" />
     </v-mapbox>
   </div>
 </template>
 
 <script>
+import VMapboxPointHighlight from './VMapboxPointHighlight.js'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MapboxMap',
   props: {
     pointSelected: { type: Object, default: null }
+  },
+  components: {
+    VMapboxPointHighlight
   },
   mounted () {
     this.map = this.$refs.map.map
@@ -40,11 +50,12 @@ export default {
   },
   watch: {
     selectedArea (value) {
-      this.map.fitBounds([
-        [value.bbox[0], value.bbox[1]],
-        [value.bbox[2], value.bbox[3]]
-      ],
-      { padding: 320 }
+      this.map.fitBounds(
+        [
+          [value.bbox[0], value.bbox[1]],
+          [value.bbox[2], value.bbox[3]]
+        ],
+        { padding: 320 }
       )
     },
     pointSelected (value) {

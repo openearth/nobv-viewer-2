@@ -28,12 +28,13 @@ export default new Vuex.Store({
         source: {
           // AN ID NEEDS TO BE GENERATED
           data: featureCollection,
-          type: 'geojson'
+          type: 'geojson',
+          generateId: true
         },
         type: 'circle',
         layout: {},
         paint: {
-          'circle-color': ['case', ['boolean', ['feature-state', 'selected'], false], 'firebrick', 'whitesmoke'],
+          'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], 'firebrick', 'whitesmoke'],
           'circle-radius': 5,
           'circle-stroke-width': 5,
           'circle-stroke-color': '#000',
