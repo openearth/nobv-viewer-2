@@ -12,34 +12,24 @@
       <v-mapbox-navigation-control :position="'top-right'" />
       <v-mapbox-layer @click='pointClicked' v-if="layerLocations" :options="layerLocations" :clickable="true"></v-mapbox-layer>
     </v-mapbox>
-      <div class="menu">
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite-streets-v12" v-model="mapStyle" >
-        <label for="satellite-streets-v12">satellite streets</label>
-        <input id="light-v11" type="radio" name="rtoggle" value="light-v11" v-model="mapStyle">
-        <label for="light-v11">light</label>
-        <input id="dark-v11" type="radio" name="rtoggle" value="dark-v11" v-model="mapStyle">
-        <label for="dark-v11">dark</label>
-        <input id="streets-v12" type="radio" name="rtoggle" value="streets-v12" v-model="mapStyle">
-        <label for="streets-v12">streets</label>
-        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors-v12" v-model="mapStyle">
-        <label for="outdoors-v12">outdoors</label>
-      </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
+import 'mapbox-gl-style-switcher/styles.css'
 
 export default {
   name: 'MapboxMap',
   mounted () {
     this.map = this.$refs.map.map
+    this.map.addControl(new MapboxStyleSwitcherControl())
   },
   data () {
     return {
       mapCenter: [5.4, 52.7],
-      mapZoom: 8.7,
-      mapStyle: 'streets-v12'
+      mapZoom: 8.7
     }
   },
   computed: {
@@ -59,9 +49,6 @@ export default {
       ],
       { padding: 320 }
       )
-    },
-    styleUrl (value) {
-      this.map.setStyle(value)
     }
   },
   methods: {
