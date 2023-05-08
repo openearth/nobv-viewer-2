@@ -87,7 +87,6 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted loaded')
     this.getLocations()
     this.getAreas()
   }

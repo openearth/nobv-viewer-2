@@ -20,11 +20,35 @@ import { mapState, mapActions } from 'vuex'
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
 import 'mapbox-gl-style-switcher/styles.css'
 
+const styles = [
+  {
+    title: 'Streets',
+    uri: 'mapbox://styles/mapbox/streets-v9'
+  },
+  {
+    title: 'Satellite',
+    uri: 'mapbox://styles/mapbox/satellite-v9'
+  }
+]
+
 export default {
   name: 'MapboxMap',
   mounted () {
     this.map = this.$refs.map.map
-    this.map.addControl(new MapboxStyleSwitcherControl())
+
+    this.map.addControl(new MapboxStyleSwitcherControl(styles))
+
+    this.initialRender = true
+
+    this.map.on('style.load', () => {
+      if (this.initialRender) {
+        this.initialRender = false
+
+        return
+      }
+
+      this.map.addLayer(this.layerLocations)
+    })
   },
   data () {
     return {
