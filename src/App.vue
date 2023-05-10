@@ -14,7 +14,7 @@
     </div>
 
     <v-main>
-      <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay>
+      <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay permanent>
         <v-list>
           <v-list-item v-for="(area, i) in areas" :key="i" link @click="handleAreaClick(area)">
             <v-list-item-content>
@@ -63,7 +63,6 @@ export default {
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
-      console.log(point)
       this.getTimeseries(point.properties.loc_id)
     },
     handleAreaClick (area) {

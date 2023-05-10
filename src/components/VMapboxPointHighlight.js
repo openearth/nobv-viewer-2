@@ -3,7 +3,6 @@ export default {
   inject: ['getMap'],
   render: () => null,
   mounted () {
-    console.log('mounted')
     this.addHighlightEffect()
   },
   methods: {
@@ -14,7 +13,6 @@ export default {
       const map = this.getMap()
       let hoverId = null
       map.on('click', 'locations', (event) => {
-        console.log('event', event.features[0])
         map.getCanvas().style.cursor = 'pointer'
 
         if (event.features.length === 0) return

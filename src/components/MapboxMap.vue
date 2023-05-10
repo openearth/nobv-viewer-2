@@ -55,22 +55,26 @@ export default {
           [value.bbox[0], value.bbox[1]],
           [value.bbox[2], value.bbox[3]]
         ],
-        { padding: 320 }
+        {
+          padding: {
+            left: 300,
+            bottom: 30,
+            right: 30,
+            top: 30
+          }
+        }
       )
     },
     pointSelected (value) {
-      console.log(value)
-      // this.map.setFeatureState({
-      //   source: 'locations',
-      //   sourceLayer: "locations",
-      //   id: HERE
-      // })
+      this.map.flyTo({
+        center: value.lngLat,
+        padding: { left: 30, bottom: 830 }
+      })
     }
   },
   methods: {
     ...mapActions(['getTimeseries']),
     pointClicked (e) {
-      console.log('when point clicked the event retursn', e)
       const point = { lngLat: e.lngLat, properties: e.features[0].properties }
       this.$emit('point-clicked', point)
     }

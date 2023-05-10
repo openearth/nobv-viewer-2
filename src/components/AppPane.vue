@@ -72,7 +72,6 @@ export default {
   },
   watch: {
     timeSeries () {
-      console.log(this.timeSeries)
       this.renderChart()
     }
   },
@@ -193,7 +192,6 @@ export default {
   },
   methods: {
     renderChart () {
-      console.log('rendering')
       this.chartOptions.series[0].data = this.timeSeries
     }
   }

@@ -52,7 +52,6 @@ export default new Vuex.Store({
   },
   getters: {
     timeSeries (state) {
-      console.log('in Getter')
       const data = []
       if (state.timeSeries && state.timeSeries.timeseries) {
         const { timeseries } = state.timeSeries
