@@ -30,7 +30,7 @@ import 'mapbox-gl-style-switcher/styles.css'
 const styles = [
   {
     title: 'Streets',
-    uri: 'mapbox://styles/mapbox/streets-v9'
+    uri: 'mapbox://styles/mapbox/streets-v12'
   },
   {
     title: 'Satellite',
