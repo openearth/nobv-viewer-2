@@ -3,7 +3,7 @@
     <v-mapbox
       class="mapbox-map"
       :access-token="accessToken"
-      map-style="mapbox://styles/mapbox/streets-v11"
+      map-style="mapbox://styles/mapbox/streets-v12"
       :center="mapCenter"
       :zoom="mapZoom"
       id="map"
@@ -24,6 +24,20 @@
 <script>
 import VMapboxPointHighlight from './VMapboxPointHighlight.js'
 import { mapState, mapActions } from 'vuex'
+import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
+import 'mapbox-gl-style-switcher/styles.css'
+
+const styles = [
+  {
+    title: 'Streets',
+    uri: 'mapbox://styles/mapbox/streets-v9'
+  },
+  {
+    title: 'Satellite',
+    uri: 'mapbox://styles/mapbox/satellite-v9'
+  }
+]
+
 export default {
   name: 'MapboxMap',
   props: {
@@ -34,6 +48,20 @@ export default {
   },
   mounted () {
     this.map = this.$refs.map.map
+
+    this.map.addControl(new MapboxStyleSwitcherControl(styles))
+
+    this.initialRender = true
+
+    this.map.on('style.load', () => {
+      if (this.initialRender) {
+        this.initialRender = false
+
+        return
+      }
+
+      this.map.addLayer(this.layerLocations)
+    })
   },
   data () {
     return {
@@ -64,6 +92,9 @@ export default {
       } else {
         return {}
       }
+    },
+    styleUrl () {
+      return `mapbox://styles/mapbox/${this.mapStyle}`
     }
   },
   watch: {
@@ -104,4 +135,14 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+.menu {
+position: absolute;
+background: #efefef;
+padding: 10px;
+font-family: 'Open Sans', sans-serif;
+top: 0;
+left: 0
+}
+
 </style>
