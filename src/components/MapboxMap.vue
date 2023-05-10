@@ -34,7 +34,7 @@ const styles = [
   },
   {
     title: 'Satellite',
-    uri: 'mapbox://styles/mapbox/satellite-v9'
+    uri: 'mapbox://styles/mapbox/satellite-streets-v9'
   }
 ]
 
