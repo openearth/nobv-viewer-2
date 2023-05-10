@@ -39,36 +39,53 @@ export default {
     return {
       mapCenter: [5.4, 52.7],
       mapZoom: 8.7,
-      accessToken: process.env.VUE_APP_MAPBOX_TOKEN
+      accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
+      activeFunction: 'selectedArea'
     }
   },
   computed: {
     ...mapState(['layerLocations']),
     selectedArea () {
       return this.$store.state.selectedArea
+    },
+    padding () {
+      if (this.activeFunction === 'selectedArea') {
+        return {
+          left: 320,
+          bottom: 70,
+          right: 30,
+          top: 160
+        }
+      } else if (this.activeFunction === 'pointSelected') {
+        return {
+          left: 30,
+          bottom: 600
+        }
+      } else {
+        return {}
+      }
     }
   },
   watch: {
     selectedArea (value) {
+      this.activeFunction = 'selectedArea'
       this.map.fitBounds(
         [
           [value.bbox[0], value.bbox[1]],
           [value.bbox[2], value.bbox[3]]
         ],
         {
-          padding: {
-            left: 300,
-            bottom: 30,
-            right: 30,
-            top: 30
-          }
+          padding: this.padding
         }
       )
     },
     pointSelected (value) {
+      this.activeFunction = 'pointSelected'
       this.map.flyTo({
         center: value.lngLat,
-        padding: { left: 30, bottom: 830 }
+        padding: this.padding,
+        speed: 0.7,
+        zoom: 16.5
       })
     }
   },

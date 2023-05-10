@@ -26,7 +26,6 @@ export default new Vuex.Store({
       const pointLayer = {
         id: 'locations',
         source: {
-          // AN ID NEEDS TO BE GENERATED
           data: featureCollection,
           type: 'geojson',
           generateId: true
@@ -34,7 +33,7 @@ export default new Vuex.Store({
         type: 'circle',
         layout: {},
         paint: {
-          'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], 'firebrick', 'whitesmoke'],
+          'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#AA7F4A', '#ffffff'],
           'circle-radius': 5,
           'circle-stroke-width': 5,
           'circle-stroke-color': '#000',
