@@ -34,7 +34,13 @@
           <h3 class="text-h6">
             Tijdreeks voor {{ id }}
           </h3>
-      <v-chart :option="chartOptions" class="chart" />
+        <v-responsive
+          class="scroll-x"
+          :min-height="0"
+          :style="{ 'overflow-x': 'auto' }"
+        >
+          <v-chart :option="chartOptions" class="chart" />
+        </v-responsive>
       </v-tab-item>
 
       <v-tab-item style="margin: 10px">
