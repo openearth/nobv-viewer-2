@@ -14,7 +14,7 @@
     </div>
 
     <v-main>
-      <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay permanent>
+      <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay>
         <v-list>
           <v-list-item v-for="(area, i) in areas" :key="i" link @click="handleAreaClick(area)">
             <v-list-item-content>
