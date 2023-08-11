@@ -65,8 +65,8 @@ export default {
   },
   data () {
     return {
-      mapCenter: [5.4, 52.7],
-      mapZoom: 8.7,
+      mapCenter: [5.4, 52.5],
+      mapZoom: 8.2,
       accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
       activeFunction: 'selectedArea'
     }
