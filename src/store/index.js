@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import wps from '../lib/wps'
-import buildFeatureUrl from '@/lib/build-feature-url'
 
 Vue.use(Vuex)
 
@@ -10,17 +9,19 @@ export default new Vuex.Store({
 
   state: {
     locations: {},
-    layerLocations: {},
-    selectedArea: null,
-    areas: [],
-    timeSeries: null
+    locationFeatures: {},
+    locationList: [],
+    layerLocations: {}
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
       state.locations = locations
     },
-    SET_AREAS (state, areas) {
-      state.areas = areas
+    SET_LOCATION_FEATURES (state, locationFeatures) {
+      state.locationFeatures = locationFeatures
+    },
+    SET_LOCATION_LIST (state, locationList) {
+      state.locationList = locationList
     },
     SET_LAYER_LOCATIONS (state, featureCollection) {
       const pointLayer = {
@@ -41,32 +42,14 @@ export default new Vuex.Store({
         }
       }
       state.layerLocations = pointLayer
-    },
-    SET_SELECTED_AREA (state, area) {
-      state.selectedArea = area
-    },
-    SET_TIMESERIES (state, timeSeries) {
-      state.timeSeries = timeSeries
     }
   },
   getters: {
-    timeSeries (state) {
-      const data = []
-      if (state.timeSeries && state.timeSeries.timeseries) {
-        const { timeseries } = state.timeSeries
-        timeseries.forEach(element => {
-          const { datetime, head } = element
-          const date = new Date(datetime)
-          data.push([date, head])
-        })
-      }
-      return data
-    }
   },
   actions: {
-    async getLocations ({ commit }) {
+    async getLocationsData ({ commit }) {
       const locations = await wps({
-        identifier: 'nobv_wps_read_locations',
+        identifier: 'nobvgl_wps_read_locations',
         outputName: 'jsonstations'
       })
       if (locations.errMsg) {
@@ -75,33 +58,12 @@ export default new Vuex.Store({
         commit('SET_LOCATIONS', locations)
         commit('SET_LAYER_LOCATIONS', locations)
       }
-    },
-    async getAreas ({ commit }) {
-      const response = await fetch(buildFeatureUrl({
-        url: 'https://bodembewegingen.nl/geoserver/nobv/ows',
-        layer: 'nobv:boundingbox'
-      }))
-      const areasData = await response.json()
-      commit('SET_AREAS', areasData.features)
-    },
-    async getTimeseries ({ commit, state }, id) {
-      const jsonData = {
-        locid: id, // check it
-        parameter: 'Grondwaterstand'
-      }
-      commit('SET_TIMESERIES', null)
-      const timeSeries = await wps({
-        identifier: 'nobv_wps_gettimeseries',
-        outputName: 'jsonstimeseries',
-        functionid: 'locationinfo',
-        data: JSON.stringify(jsonData)
-      })
-      if (timeSeries.errMsg) {
-        // console.log(locations.errMsg)
-      } else {
-        // console.log(timeSeries)
-        commit('SET_TIMESERIES', timeSeries)
-      }
+
+      const locationFeatures = locations.features
+      commit('SET_LOCATION_FEATURES', locationFeatures)
+
+      const locationList = locationFeatures.map(feature => feature.properties.loc_id)
+      commit('SET_LOCATION_LIST', locationList)
     }
   },
   modules: {

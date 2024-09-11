@@ -4,18 +4,18 @@ import queryString from 'query-string'
 // https://docs.geoserver.org/stable/en/user/services/wfs/reference.html#getfeature
 export default function ({
   url,
-  layer,
+  identifier,
   propertyName = null,
   filter = null,
   maxFeatures = null
 }) {
   const params = {
-    request: 'GetFeature',
-    service: 'WFS',
-    version: '1.0.0',
+    request: 'Execute',
+    service: 'WPS',
+    version: '2.0.0',
     outputFormat: 'json',
-    typeName: layer,
-    srsName: 'EPSG:4326'
+    identifier: identifier
+    // TODO for the future: add datainputs to filter per projectnr. Example: datainputs=projectinfo={"projectnr":11206021}
   }
 
   if (filter) {

@@ -16,10 +16,11 @@
     <v-main>
       <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay>
         <v-list>
-          <v-list-item v-for="(area, i) in areas" :key="i" link @click="handleAreaClick(area)">
+          <!-- TODO: add below this but for locations.  link @click="handleAreaClick(area)" -->
+          <v-list-item v-for="(locationName, i) in locationList" :key="i">
             <v-list-item-content>
               <v-list-item-title>{{
-                area.properties.groupname
+                locationName
               }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -47,12 +48,12 @@ export default {
     point: null // TODO: instead of a data, move it to state. Mutate it every time you click  a new point
   }),
   computed: {
-    areas () {
-      return this.$store.state.areas
+    locationList () {
+      return this.$store.state.locationList
     }
   },
   methods: {
-    ...mapActions(['getLocations', 'getAreas', 'getTimeseries']),
+    ...mapActions(['getLocationsData']),
     toggleDrawer () {
       this.drawer = !this.drawer
       this.icon =
@@ -63,15 +64,14 @@ export default {
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
-      this.getTimeseries(point.properties.loc_id)
-    },
-    handleAreaClick (area) {
-      this.$store.commit('SET_SELECTED_AREA', area)
     }
+    // TODO: change to handle location
+    // handleAreaClick (area) {
+    //   this.$store.commit('SET_SELECTED_AREA', area)
+    // }
   },
   mounted () {
-    this.getLocations()
-    this.getAreas()
+    this.getLocationsData()
   }
 }
 </script>
