@@ -11,11 +11,16 @@ export default new Vuex.Store({
     locations: {},
     locationFeatures: {},
     locationList: [],
-    layerLocations: {}
+    layerLocations: {},
+    timeseries: {},
+    selectedPoint: {}
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
       state.locations = locations
+    },
+    SET_TIMESERIES (state, timeseries) {
+      state.timeseries = timeseries
     },
     SET_LOCATION_FEATURES (state, locationFeatures) {
       state.locationFeatures = locationFeatures
@@ -42,6 +47,9 @@ export default new Vuex.Store({
         }
       }
       state.layerLocations = pointLayer
+    },
+    SET_SELECTED_POINT (state, point) {
+      state.selectedPoint = point
     }
   },
   getters: {
@@ -64,6 +72,22 @@ export default new Vuex.Store({
 
       const locationList = locationFeatures.map(feature => feature.properties.loc_id)
       commit('SET_LOCATION_LIST', locationList)
+    },
+    async getTimeseriesData ({ commit }) {
+      const timeseries = await wps({
+        identifier: 'nobvgl_wps_gettimeseries',
+        outputName: 'jsonstimeseries',
+        functionid: 'locationinfo',
+        data: JSON.stringify({ measid: this.state.selectedPoint.properties.meas_id, parameter: 'regenval', datestart: '2024-03-01', dateend: '2024-03-31' })
+      })
+      if (timeseries.errMsg) {
+        console.log(timeseries.errMsg)
+      } else {
+        commit('SET_TIMESERIES', timeseries)
+      }
+    },
+    setSelectedPoint ({ commit }, point) {
+      commit('SET_SELECTED_POINT', point)
     }
   },
   modules: {

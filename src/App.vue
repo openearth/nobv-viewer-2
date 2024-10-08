@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getLocationsData']),
+    ...mapActions(['getLocationsData', 'getTimeseriesData', 'setSelectedPoint']),
     toggleDrawer () {
       this.drawer = !this.drawer
       this.icon =
@@ -61,6 +61,8 @@ export default {
     },
     onPointClicked (point) {
       this.point = point // This is where I will be calling the mutation or action
+      this.setSelectedPoint(point)
+      this.getTimeseriesData()
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
