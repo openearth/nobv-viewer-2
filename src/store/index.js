@@ -53,6 +53,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    timeSeries: state => {
+      return state.timeseries.timeseries || []
+    }
   },
   actions: {
     async getLocationsData ({ commit }) {
@@ -74,6 +77,8 @@ export default new Vuex.Store({
       commit('SET_LOCATION_LIST', locationList)
     },
     async getTimeseriesData ({ commit }) {
+      // TODO: make a better reset of the timeseries state
+      this.state.timeseries = {}
       const timeseries = await wps({
         identifier: 'nobvgl_wps_gettimeseries',
         outputName: 'jsonstimeseries',

@@ -16,7 +16,6 @@
           Details meetlocatie
         </h3>
         <location-details :pointSelected="pointSelected" />
-        <v-divider class="my-8" />
         <!-- <level-details /> -->
       </div>
 
@@ -27,7 +26,7 @@
         center-active
         dark
       >
-        <v-tab>Waterstand</v-tab>
+        <v-tab>Tijdreeks</v-tab>
         <v-tab>Foto's</v-tab>
 
       <v-tab-item style="margin: 10px">
@@ -39,7 +38,8 @@
           :min-height="0"
           :style="{ 'overflow-x': 'auto' }"
         >
-          <v-chart :option="chartOptions" class="chart" />
+          <v-chart v-if="hasTimeSeriesData" :option="chartOptions" class="chart"/>
+          <div v-else class="no-data-message">Geen tijdreeksgegevens beschikbaar</div>
         </v-responsive>
       </v-tab-item>
 
@@ -194,11 +194,19 @@ export default {
     ...mapGetters(['timeSeries']),
     id () {
       return this.pointSelected?.properties.loc_id
+    },
+    hasTimeSeriesData () {
+      return this.timeSeries && this.timeSeries.length > 0
     }
   },
   methods: {
     renderChart () {
-      this.chartOptions.series[0].data = this.timeSeries
+      // Sort timeseries data by ascending timestamp. TODO: this should be handled by the backend
+      const sortedData = this.timeSeries
+        .map(item => [new Date(item.timestamp), item.value])
+        .sort((a, b) => a[0] - b[0])
+
+      this.chartOptions.series[0].data = sortedData
     }
   }
 }

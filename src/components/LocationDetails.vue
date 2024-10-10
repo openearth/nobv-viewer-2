@@ -9,11 +9,7 @@
           </tr>
           <tr>
             <td>Coördinaten</td>
-            <td>Lng: {{ coordinates?.lng }} - Lat: {{ coordinates?.lat }}</td>
-          </tr>
-          <tr>
-            <td>Gemiddelde</td>
-            <td>{{ meanhead }}</td>
+            <td>Lng: {{ coordinates?.lng?.toFixed(3) }} - Lat: {{ coordinates?.lat?.toFixed(3) }}</td>
           </tr>
         </tbody>
       </template>
@@ -32,9 +28,6 @@ export default {
     },
     coordinates () {
       return this.pointSelected?.lngLat
-    },
-    meanhead () {
-      return this.pointSelected?.properties.mean_head
     }
   },
   props: {
