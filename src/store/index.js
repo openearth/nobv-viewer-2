@@ -55,7 +55,6 @@ export default new Vuex.Store({
     },
     SET_SELECTED_POINT (state, point) {
       state.selectedPoint = point
-      console.log('selectedPoint', state.selectedPoint)
     }
   },
   getters: {
