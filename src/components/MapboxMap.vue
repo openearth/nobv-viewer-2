@@ -16,7 +16,7 @@
         :options="layerLocations"
         :clickable="true"
       ></v-mapbox-layer>
-      <v-mapbox-point-highlight v-if="layerLocations" />
+      <v-mapbox-point-highlight v-if="mapLoaded && layerLocations" />
     </v-mapbox>
   </div>
 </template>
@@ -46,10 +46,24 @@ export default {
   components: {
     VMapboxPointHighlight
   },
+  data () {
+    return {
+      mapCenter: [4.7505, 51.9893],
+      mapZoom: 9,
+      accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
+      activeFunction: 'selectedArea',
+      mapLoaded: false
+    }
+  },
   mounted () {
     this.map = this.$refs.map.map
 
     this.map.addControl(new MapboxStyleSwitcherControl(styles))
+
+    this.map.on('load', () => {
+      // Set mapLoaded to true when the map is fully loaded
+      this.mapLoaded = true
+    })
 
     this.initialRender = true
 
@@ -62,14 +76,6 @@ export default {
 
       this.map.addLayer(this.layerLocations)
     })
-  },
-  data () {
-    return {
-      mapCenter: [4.7505, 51.9893],
-      mapZoom: 9,
-      accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
-      activeFunction: 'selectedArea'
-    }
   },
   computed: {
     ...mapState(['layerLocations']),
