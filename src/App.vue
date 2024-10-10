@@ -16,11 +16,11 @@
     <v-main>
       <v-navigation-drawer absolute dark src="./assets/subsoil-background.jpg" width="300" v-model="drawer" hide-overlay>
         <v-list>
-          <!-- TODO: add below this but for locations.  link @click="handleAreaClick(area)" -->
-          <v-list-item v-for="(locationName, i) in locationList" :key="i">
+          <!-- TODO: add below this but for locations.  link @click="handleLocationListClick(area)" -->
+          <v-list-item v-for="(location, i) in locations.features" :key="i" link @click="onPointListClicked(location)">
             <v-list-item-content>
               <v-list-item-title>{{
-                locationName
+                location.properties.loc_id
               }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -36,7 +36,7 @@
 <script>
 import MapboxMap from './components/MapboxMap'
 import AppPane from './components/AppPane'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   components: { MapboxMap, AppPane },
@@ -48,6 +48,7 @@ export default {
     point: null // TODO: instead of a data, move it to state. Mutate it every time you click  a new point
   }),
   computed: {
+    ...mapState(['locations']),
     locationList () {
       return this.$store.state.locationList
     }
@@ -66,11 +67,31 @@ export default {
       if (this.appCollapsed) {
         this.appCollapsed = !this.appCollapsed
       }
+    },
+    onPointListClicked (location) {
+    // Transform the location object to match the format
+      const point = {
+        lngLat: {
+          lng: location.geometry.coordinates[0],
+          lat: location.geometry.coordinates[1]
+        },
+        properties: {
+          loc_id: location.properties.loc_id,
+          meas_id: location.properties.meas_id,
+          meas_type: location.properties.meas_type,
+          parameters: JSON.stringify(location.properties.parameters) // Convert array to string
+        }
+      }
+
+      this.point = point
+
+      this.setSelectedPoint(point)
+      this.getTimeseriesData()
+
+      if (this.appCollapsed) {
+        this.appCollapsed = !this.appCollapsed
+      }
     }
-    // TODO: change to handle location
-    // handleAreaClick (area) {
-    //   this.$store.commit('SET_SELECTED_AREA', area)
-    // }
   },
   mounted () {
     this.getLocationsData()

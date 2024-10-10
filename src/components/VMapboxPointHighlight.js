@@ -12,20 +12,15 @@ export default {
     addHighlightEffect () {
       const map = this.getMap()
       let hoverId = null
-      map.on('click', 'locations', (event) => {
-        map.getCanvas().style.cursor = 'pointer'
+      let selectedId = null
+
+      // Add hover effect when mouse enters the point
+      map.on('mouseenter', 'locations', (event) => {
+        map.getCanvas().style.cursor = 'pointer' // Change cursor to pointer
 
         if (event.features.length === 0) return
 
-        // When the mouse moves over the locations layer, update the
-        // feature state for the feature under the mouse
-        if (hoverId) {
-          map.removeFeatureState({
-            source: 'locations',
-            id: hoverId
-          })
-        }
-
+        // Get the hoverId and set hover state
         hoverId = event.features[0].id
 
         map.setFeatureState(
@@ -39,8 +34,58 @@ export default {
         )
       })
 
-      // When the mouse leaves the locations layer, update the
-      // feature state of the previously hovered feature
+      // Remove hover effect when mouse leaves the point
+      map.on('mouseleave', 'locations', () => {
+        map.getCanvas().style.cursor = '' // Reset cursor
+
+        // Only remove hover state, do not affect selected state
+        if (hoverId) {
+          map.setFeatureState(
+            {
+              source: 'locations',
+              id: hoverId
+            },
+            {
+              hover: false // Only remove hover state, keep selection intact
+            }
+          )
+        }
+
+        hoverId = null
+      })
+
+      // Add click event to handle point selection
+      map.on('click', 'locations', (event) => {
+        if (event.features.length === 0) return
+
+        const clickedId = event.features[0].id
+
+        // Remove selected state from the previously selected feature
+        if (selectedId && selectedId !== clickedId) {
+          map.setFeatureState(
+            {
+              source: 'locations',
+              id: selectedId
+            },
+            {
+              selected: false // Reset the previous selected point
+            }
+          )
+        }
+
+        // Set the clicked feature as selected
+        selectedId = clickedId
+
+        map.setFeatureState(
+          {
+            source: 'locations',
+            id: selectedId
+          },
+          {
+            selected: true // Keep the selected state
+          }
+        )
+      })
     }
   }
 }

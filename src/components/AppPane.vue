@@ -26,7 +26,7 @@
         center-active
         dark
       >
-        <v-tab>Tijdreeks</v-tab>
+        <v-tab>Regenval</v-tab>
         <v-tab>Foto's</v-tab>
 
       <v-tab-item style="margin: 10px">

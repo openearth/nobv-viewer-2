@@ -39,7 +39,12 @@ export default new Vuex.Store({
         type: 'circle',
         layout: {},
         paint: {
-          'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#AA7F4A', '#ffffff'],
+          'circle-color': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false], '#AA7F4A', // Color for selected points
+            ['boolean', ['feature-state', 'hover'], false], '#AA7F4A', // Color for hovered points
+            '#ffffff' // Default color (white)
+          ],
           'circle-radius': 5,
           'circle-stroke-width': 5,
           'circle-stroke-color': '#000',
@@ -50,6 +55,7 @@ export default new Vuex.Store({
     },
     SET_SELECTED_POINT (state, point) {
       state.selectedPoint = point
+      console.log('selectedPoint', state.selectedPoint)
     }
   },
   getters: {
