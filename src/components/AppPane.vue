@@ -27,7 +27,7 @@
         dark
       >
         <v-tab>Regenval</v-tab>
-        <v-tab>Foto's</v-tab>
+        <!-- <v-tab>Foto's</v-tab> -->
 
       <v-tab-item style="margin: 10px">
           <h3 class="text-h6">
@@ -43,11 +43,11 @@
         </v-responsive>
       </v-tab-item>
 
-      <v-tab-item style="margin: 10px">
+      <!-- <v-tab-item style="margin: 10px">
           <h3 class="text-h6">
             Foto's
           </h3>
-      </v-tab-item>
+      </v-tab-item> -->
 
       </v-tabs>
     </v-card>
@@ -144,7 +144,7 @@ export default {
         },
         series: [
           {
-            name: 'Slootwaterstand',
+            name: 'Regenval',
             type: 'line',
             smooth: true,
             symbol: 'none',
