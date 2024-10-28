@@ -110,6 +110,7 @@ export default {
         },
         yAxis: {
           type: 'value',
+          name: this.unit,
           min: function (value) {
             return Math.ceil(value.min - (value.max - value.min) / 2)
           },
@@ -191,7 +192,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['timeSeries']),
+    ...mapGetters(['timeSeries', 'unit']),
     id () {
       return this.pointSelected?.properties.loc_id
     },
@@ -207,6 +208,7 @@ export default {
         .sort((a, b) => a[0] - b[0])
 
       this.chartOptions.series[0].data = sortedData
+      this.chartOptions.yAxis.name = this.unit
     }
   }
 }

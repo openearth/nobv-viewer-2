@@ -13,7 +13,8 @@ export default new Vuex.Store({
     locationList: [],
     layerLocations: {},
     timeseries: {},
-    selectedPoint: {}
+    selectedPoint: {},
+    unit: ''
   },
   mutations: {
     SET_LOCATIONS (state, locations) {
@@ -21,6 +22,8 @@ export default new Vuex.Store({
     },
     SET_TIMESERIES (state, timeseries) {
       state.timeseries = timeseries
+      state.unit = timeseries.parameterProperties.unit
+      console.log(this.unit)
     },
     SET_LOCATION_FEATURES (state, locationFeatures) {
       state.locationFeatures = locationFeatures
@@ -60,6 +63,9 @@ export default new Vuex.Store({
   getters: {
     timeSeries: state => {
       return state.timeseries.timeseries || []
+    },
+    unit: state => {
+      return state.unit || ''
     }
   },
   actions: {
