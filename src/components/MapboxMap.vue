@@ -127,7 +127,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getTimeseries']),
+    ...mapActions(['getRainfallTimeseries', 'getExtensometerTimeseries']),
     pointClicked (e) {
       const point = { lngLat: e.lngLat, properties: e.features[0].properties }
       this.$emit('point-clicked', point)

@@ -1,6 +1,6 @@
 <template>
-    <div class="app-panel" :class="{ 'app-panel--collapsed': panelIsCollapsed }">
-      <div class="details d-flex flex-row">
+  <div class="app-panel" :class="{ 'app-panel--collapsed': panelIsCollapsed }">
+    <div class="details d-flex flex-row">
       <v-btn
       v-if="!panelIsCollapsed"
       class="app-panel__minimize"
@@ -11,50 +11,57 @@
         <v-icon>mdi-chevron-down</v-icon>
       </v-btn>
 
-      <div class="details__column">
-        <h3 class="text-h6">
-          Details meetlocatie
-        </h3>
-        <location-details :pointSelected="pointSelected" />
-        <!-- <level-details /> -->
-      </div>
+    <div class="details__column">
+      <h3 class="text-h6">
+        Details meetlocatie
+      </h3>
+      <location-details :pointSelected="pointSelected" />
+      <!-- <level-details /> -->
+    </div>
 
-      <div class="details__column">
-    <v-card>
-      <v-tabs
-        background-color="#AA7F4A"
-        center-active
-        dark
-      >
-        <v-tab>Regenval</v-tab>
-        <!-- <v-tab>Foto's</v-tab> -->
+    <div class="details__column">
+        <v-card>
+          <v-tabs
+            background-color="#AA7F4A"
+            center-active
+            dark
+          >
+            <v-tab>Zetting</v-tab>
+            <v-tab>Regenval</v-tab>
 
-      <v-tab-item style="margin: 10px">
-          <h3 class="text-h6">
-            Tijdreeks voor {{ id }}
-          </h3>
-        <v-responsive
-          class="scroll-x"
-          :min-height="0"
-          :style="{ 'overflow-x': 'auto' }"
-        >
-          <v-chart v-if="hasTimeSeriesData" :option="chartOptions" class="chart"/>
-          <div v-else class="no-data-message">Geen tijdreeksgegevens beschikbaar</div>
-        </v-responsive>
-      </v-tab-item>
+            <v-tab-item style="margin: 10px">
+                <h3 class="text-h6">
+                  Tijdreeks voor {{ id }}
+                </h3>
+              <v-responsive
+                class="scroll-x"
+                :min-height="0"
+                :style="{ 'overflow-x': 'auto' }"
+              >
+                <v-chart v-if="hasExtensometerTimeSeriesData" :option="extensometerChartOptions" class="chart"/>
+                <div v-else class="no-data-message">Geen tijdreeksgegevens van zetting beschikbaar</div>
+              </v-responsive>
+            </v-tab-item>
 
-      <!-- <v-tab-item style="margin: 10px">
-          <h3 class="text-h6">
-            Foto's
-          </h3>
-      </v-tab-item> -->
+            <v-tab-item style="margin: 10px">
+                <h3 class="text-h6">
+                  Tijdreeks voor {{ id }}
+                </h3>
+              <v-responsive
+                class="scroll-x"
+                :min-height="0"
+                :style="{ 'overflow-x': 'auto' }"
+              >
+                <v-chart v-if="hasRainfallTimeSeriesData" :option="rainfallChartOptions" class="chart"/>
+                <div v-else class="no-data-message">Geen tijdreeksgegevens van regenval beschikbaar</div>
+              </v-responsive>
+            </v-tab-item>
 
-      </v-tabs>
-    </v-card>
-        <!-- <area-chart v-if="showChart" /> -->
-      </div>
+          </v-tabs>
+        </v-card>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -77,13 +84,16 @@ export default {
     }
   },
   watch: {
-    timeSeries () {
-      this.renderChart()
+    rainfallTimeSeries () {
+      this.renderRainfallChart()
+    },
+    extensometerTimeSeries () {
+      this.renderExtensometerChart()
     }
   },
   data () {
     return {
-      chartOptions: {
+      extensometerChartOptions: {
         tooltip: {
           trigger: 'axis',
           position: function (pt) {
@@ -110,7 +120,115 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: this.unit,
+          name: this.extensometerUnit ? `[${this.extensometerUnit}]` : '',
+          min: function (value) {
+            const minValue = value.min - (value.max - value.min) / 2
+            return minValue < 0 ? Math.floor(minValue) : Math.ceil(minValue)
+          },
+          max: function (value) {
+            const maxValue = value.max + (value.max - value.min) / 2
+            return maxValue < 0 ? Math.floor(maxValue) : Math.ceil(maxValue)
+          },
+          boundaryGap: [0, '100%'],
+          axisLabel: {
+            showMinLabel: true,
+            showMaxLabel: true
+          }
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 100
+          },
+          {
+            start: 0,
+            end: 100,
+            top: '85%'
+          }
+        ],
+        grid: {
+          top: '50px',
+          right: '40px',
+          bottom: '70px',
+          left: '16px',
+          containLabel: true,
+          backgroundColor: '#fff'
+        },
+        series: [
+          {
+            name: 'Zetting',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            areaStyle: {
+              color: 'rgba(0, 0, 0, 0)'
+            },
+            data: this.extensometerTimeseries,
+            markPoint: {
+              data: [
+                {
+                  label: {
+                    color: '#373737',
+                    textBorderColor: 'none',
+                    offset: [0, -15]
+                  },
+                  name: 'Max',
+                  symbolOffset: [0, -5],
+                  symbolRotate: 180,
+                  type: 'max'
+                },
+                {
+                  label: {
+                    color: '#373737',
+                    textBorderColor: 'none',
+                    offset: [0, 15]
+                  },
+                  name: 'Min',
+                  symbolOffset: [0, 5],
+                  type: 'min'
+                }
+              ],
+              emphasis: {
+                disabled: true
+              },
+              itemStyle: {
+                color: '#373737'
+              },
+              symbol: 'arrow',
+              symbolSize: '10'
+            }
+          }
+        ]
+      },
+      rainfallChartOptions: {
+        tooltip: {
+          trigger: 'axis',
+          position: function (pt) {
+            return [pt[0], '10%']
+          }
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'time',
+          boundaryGap: false,
+          axisLabel: {
+            formatter: '{yyyy}/{MM}/{dd}',
+            rotate: -20
+          },
+          offset: 5
+        },
+        yAxis: {
+          type: 'value',
+          name: this.rainfallUnit ? `[${this.rainfallUnit}]` : '',
           min: function (value) {
             return Math.ceil(value.min - (value.max - value.min) / 2)
           },
@@ -152,7 +270,7 @@ export default {
             areaStyle: {
               color: 'rgba(0, 0, 0, 0)'
             },
-            data: this.timeSeries,
+            data: this.rainfallTimeSeries,
             markPoint: {
               data: [
                 {
@@ -192,23 +310,35 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['timeSeries', 'unit']),
+    ...mapGetters(['rainfallTimeSeries', 'rainfallUnit', 'extensometerTimeSeries', 'extensometerUnit']),
     id () {
       return this.pointSelected?.properties.loc_id
     },
-    hasTimeSeriesData () {
-      return this.timeSeries && this.timeSeries.length > 0
+    hasRainfallTimeSeriesData () {
+      return this.rainfallTimeSeries && this.rainfallTimeSeries.length > 0
+    },
+    hasExtensometerTimeSeriesData () {
+      return this.extensometerTimeSeries && this.extensometerTimeSeries.length > 0
     }
   },
   methods: {
-    renderChart () {
+    renderRainfallChart () {
       // Sort timeseries data by ascending timestamp. TODO: this should be handled by the backend
-      const sortedData = this.timeSeries
+      const sortedData = this.rainfallTimeSeries
         .map(item => [new Date(item.timestamp), item.value])
         .sort((a, b) => a[0] - b[0])
 
-      this.chartOptions.series[0].data = sortedData
-      this.chartOptions.yAxis.name = this.unit
+      this.rainfallChartOptions.series[0].data = sortedData
+      this.rainfallChartOptions.yAxis.name = this.rainfallUnit ? `[${this.rainfallUnit}]` : ''
+    },
+    renderExtensometerChart () {
+      // Sort timeseries data by ascending timestamp. TODO: this should be handled by the backend
+      const sortedData = this.extensometerTimeSeries
+        .map(item => [new Date(item.timestamp), item.value])
+        .sort((a, b) => a[0] - b[0])
+
+      this.extensometerChartOptions.series[0].data = sortedData
+      this.extensometerChartOptions.yAxis.name = this.extensometerUnit ? `[${this.extensometerUnit}]` : ''
     }
   }
 }
@@ -269,6 +399,6 @@ export default {
 }
 
 .chart {
-  height: 400px;
+  height: 400px
 }
 </style>
