@@ -399,6 +399,8 @@ export default {
 }
 
 .chart {
-  height: 400px
+  height: 400px;
+  /* TODO: the width fixes the DOM error when going between points, but the warning is still in the console */
+  width: 75vw
 }
 </style>
