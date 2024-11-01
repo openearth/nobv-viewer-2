@@ -109,16 +109,31 @@ export default new Vuex.Store({
     async getRainfallTimeseriesData ({ commit }) {
       // TODO: make a better reset of the timeseries state
       this.state.rainfallTimeseries = {}
-      const rainfallTimeseries = await wps({
-        identifier: 'nobvgl_wps_gettimeseries',
-        outputName: 'jsonstimeseries',
-        functionid: 'locationinfo',
-        data: JSON.stringify({ measid: this.state.selectedPoint.properties.meas_id, parameter: 'regenval', datestart: '2024-03-01', dateend: '2024-03-31' })
-      })
-      if (rainfallTimeseries.errMsg) {
-        console.log(rainfallTimeseries.errMsg)
-      } else {
+
+      try {
+        const rainfallTimeseries = await wps({
+          identifier: 'nobvgl_wps_gettimeseries',
+          outputName: 'jsonstimeseries',
+          functionid: 'locationinfo',
+          data: JSON.stringify({
+            measid: this.state.selectedPoint.properties.meas_id,
+            parameter: 'regenval',
+            datestart: '2024-03-01',
+            dateend: '2024-03-31'
+          })
+        })
+
+        // Handle error in response or if rainfallTimeseries is null/undefined
+        if (!rainfallTimeseries || rainfallTimeseries.errMsg) {
+          console.error('An error occurred while fetching rainfall timeseries data:', rainfallTimeseries ? rainfallTimeseries.errMsg : 'Response is null or undefined')
+          return
+        }
+
+        // If no errors, commit the result
         commit('SET_RAINFALL_TIMESERIES', rainfallTimeseries)
+      } catch (error) {
+        // Handle unexpected errors during the request
+        console.error('An error occurred while fetching rainfall timeseries data:', error)
       }
     },
     async getExtensometerTimeseriesData ({ commit }) {
@@ -143,18 +158,25 @@ export default new Vuex.Store({
       try {
         const results = await Promise.all(requests)
 
+        // Filter out successful results and handle errors for null/undefined or errMsg
         const successfulResults = results.filter(result => {
-          if (result.errMsg) {
-            console.log(result.errMsg)
-            return false
+          if (!result || result.errMsg) {
+            console.error('An error occurred while fetching extensometer data:', result ? result.errMsg : 'Response is null or undefined')
+            return false // Filter out unsuccessful results
           }
-          return true
+          return true // Keep successful results
         })
 
-        // Commit the successful results
-        commit('SET_EXTENSOMETER_TIMESERIES', successfulResults)
+        // Check if there are any successful results before committing
+        if (successfulResults.length > 0) {
+          // Commit the successful results
+          commit('SET_EXTENSOMETER_TIMESERIES', successfulResults)
+        } else {
+          console.warn('No valid extensometer timeseries data could be fetched.')
+        }
       } catch (error) {
-        console.error('An error occurred while fetching extensometer data:', error)
+        // Handle unexpected errors during the request
+        console.error('An unexpected error occurred while fetching extensometer data:', error)
       }
     },
     setSelectedPoint ({ commit }, point) {
