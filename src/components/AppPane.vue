@@ -311,12 +311,28 @@ export default {
           .sort((a, b) => a[0] - b[0])
       })
 
+      const colors = [
+        '#A0522D',
+        '#8B4513',
+        '#6B4226',
+        '#5C4033',
+        '#4E3629',
+        '#808080'
+      ]
+
       // Update chart options to include all six time series
       this.extensometerChartOptions.series = sortedData.map((data, index) => ({
         name: `Zetting ${index + 1}`,
         type: 'line',
         smooth: true,
         symbol: 'none',
+        lineStyle: {
+          color: colors[index],
+          width: 2
+        },
+        itemStyle: {
+          color: colors[index]
+        },
         areaStyle: {
           color: 'rgba(0, 0, 0, 0)'
         },
