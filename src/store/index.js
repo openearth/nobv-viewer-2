@@ -13,7 +13,7 @@ export default new Vuex.Store({
     locationList: [],
     layerLocations: {},
     rainfallTimeseries: {},
-    extensometerTimeseries: {}, // TODO: repeat all that is done for rainfallTimeseries but for extensometerTimeseries
+    extensometerTimeseries: [],
     selectedPoint: {},
     rainfallUnit: '',
     extensometerUnit: ''
@@ -25,12 +25,13 @@ export default new Vuex.Store({
     SET_RAINFALL_TIMESERIES (state, rainfallTimeseries) {
       state.rainfallTimeseries = rainfallTimeseries
       state.rainfallUnit = rainfallTimeseries.parameterProperties.unit
-      console.log(state.rainfallUnit)
     },
     SET_EXTENSOMETER_TIMESERIES (state, extensometerTimeseries) {
-      state.extensometerTimeseries = extensometerTimeseries
-      state.extensometerUnit = extensometerTimeseries.parameterProperties.unit
-      console.log(state.extensometerUnit)
+      Vue.set(state, 'extensometerTimeseries', extensometerTimeseries)
+      if (extensometerTimeseries.length > 0 && extensometerTimeseries[0].parameterProperties) {
+        state.extensometerUnit = extensometerTimeseries[0].parameterProperties.unit
+      }
+      console.log('Extensometer Timeseries updated:', state.extensometerTimeseries)
     },
     SET_LOCATION_FEATURES (state, locationFeatures) {
       state.locationFeatures = locationFeatures
@@ -75,7 +76,12 @@ export default new Vuex.Store({
       return state.rainfallUnit || ''
     },
     extensometerTimeSeries: state => {
-      return state.extensometerTimeseries.timeseries || []
+      if (!state.extensometerTimeseries || state.extensometerTimeseries.length === 0) {
+        return []
+      }
+
+      // Return an array of all the timeseries arrays
+      return state.extensometerTimeseries.map(item => item.timeseries || [])
     },
     extensometerUnit: state => {
       return state.extensometerUnit || ''
@@ -117,17 +123,38 @@ export default new Vuex.Store({
     },
     async getExtensometerTimeseriesData ({ commit }) {
       // TODO: make a better reset of the timeseries state
-      this.state.extensometerTimeseries = {}
-      const extensometerTimeseries = await wps({
-        identifier: 'nobvgl_wps_gettimeseries',
-        outputName: 'jsonstimeseries',
-        functionid: 'locationinfo',
-        data: JSON.stringify({ measid: this.state.selectedPoint.properties.meas_id, parameter: 'zetting2', datestart: '2024-03-01', dateend: '2024-03-31' })
+      this.state.extensometerTimeseries = []
+
+      const parameters = ['zetting1', 'zetting2', 'zetting3', 'zetting4', 'zetting5', 'zetting6']
+      const requests = parameters.map(parameter => {
+        return wps({
+          identifier: 'nobvgl_wps_gettimeseries',
+          outputName: 'jsonstimeseries',
+          functionid: 'locationinfo',
+          data: JSON.stringify({
+            measid: this.state.selectedPoint.properties.meas_id,
+            parameter: parameter,
+            datestart: '2024-03-01',
+            dateend: '2024-03-31'
+          })
+        })
       })
-      if (extensometerTimeseries.errMsg) {
-        console.log(extensometerTimeseries.errMsg)
-      } else {
-        commit('SET_EXTENSOMETER_TIMESERIES', extensometerTimeseries)
+
+      try {
+        const results = await Promise.all(requests)
+
+        const successfulResults = results.filter(result => {
+          if (result.errMsg) {
+            console.log(result.errMsg)
+            return false
+          }
+          return true
+        })
+
+        // Commit the successful results
+        commit('SET_EXTENSOMETER_TIMESERIES', successfulResults)
+      } catch (error) {
+        console.error('An error occurred while fetching extensometer data:', error)
       }
     },
     setSelectedPoint ({ commit }, point) {

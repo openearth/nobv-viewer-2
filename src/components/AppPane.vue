@@ -87,8 +87,11 @@ export default {
     rainfallTimeSeries () {
       this.renderRainfallChart()
     },
-    extensometerTimeSeries () {
-      this.renderExtensometerChart()
+    extensometerTimeseries (newVal) {
+      if (newVal && newVal.length > 0) {
+        console.log('Extensometer timeseries updated, rendering chart.')
+        this.renderExtensometerChart()
+      }
     }
   },
   data () {
@@ -332,12 +335,70 @@ export default {
       this.rainfallChartOptions.yAxis.name = this.rainfallUnit ? `[${this.rainfallUnit}]` : ''
     },
     renderExtensometerChart () {
-      // Sort timeseries data by ascending timestamp. TODO: this should be handled by the backend
-      const sortedData = this.extensometerTimeSeries
-        .map(item => [new Date(item.timestamp), item.value])
-        .sort((a, b) => a[0] - b[0])
+      if (!this.extensometerTimeseries || this.extensometerTimeseries.length === 0) {
+        console.warn('Extensometer timeseries data is empty or undefined.')
+        return
+      }
 
-      this.extensometerChartOptions.series[0].data = sortedData
+      // Sort timeseries data for each parameter by ascending timestamp
+      const sortedData = this.extensometerTimeseries.map(timeseries => {
+        if (!timeseries.timeseries) {
+          console.warn('Timeseries data is missing for one of the zetting parameters:', timeseries)
+          return []
+        }
+        return timeseries.timeseries
+          .map(item => [new Date(item.timestamp), item.value])
+          .sort((a, b) => a[0] - b[0])
+      })
+
+      console.log('sortedData', this.sortedData)
+
+      // Update chart options to include all six time series
+      this.extensometerChartOptions.series = sortedData.map((data, index) => ({
+        name: `Zetting ${index + 1}`,
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {
+          color: 'rgba(0, 0, 0, 0)'
+        },
+        data: data,
+        markPoint: {
+          data: [
+            {
+              label: {
+                color: '#373737',
+                textBorderColor: 'none',
+                offset: [0, -15]
+              },
+              name: 'Max',
+              symbolOffset: [0, -5],
+              symbolRotate: 180,
+              type: 'max'
+            },
+            {
+              label: {
+                color: '#373737',
+                textBorderColor: 'none',
+                offset: [0, 15]
+              },
+              name: 'Min',
+              symbolOffset: [0, 5],
+              type: 'min'
+            }
+          ],
+          emphasis: {
+            disabled: true
+          },
+          itemStyle: {
+            color: '#373737'
+          },
+          symbol: 'arrow',
+          symbolSize: '10'
+        }
+      }))
+
+      // Update y-axis name if units are available
       this.extensometerChartOptions.yAxis.name = this.extensometerUnit ? `[${this.extensometerUnit}]` : ''
     }
   }
