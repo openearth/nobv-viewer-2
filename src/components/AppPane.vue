@@ -87,8 +87,8 @@ export default {
     rainfallTimeSeries () {
       this.renderRainfallChart()
     },
-    extensometerTimeseries (newVal) {
-      if (newVal && newVal.length > 0) {
+    extensometerTimeSeries (newVal) {
+      if (newVal && Array.isArray(newVal) && newVal.length > 0) {
         console.log('Extensometer timeseries updated, rendering chart.')
         this.renderExtensometerChart()
       }
@@ -158,51 +158,7 @@ export default {
           containLabel: true,
           backgroundColor: '#fff'
         },
-        series: [
-          {
-            name: 'Zetting',
-            type: 'line',
-            smooth: true,
-            symbol: 'none',
-            areaStyle: {
-              color: 'rgba(0, 0, 0, 0)'
-            },
-            data: this.extensometerTimeseries,
-            markPoint: {
-              data: [
-                {
-                  label: {
-                    color: '#373737',
-                    textBorderColor: 'none',
-                    offset: [0, -15]
-                  },
-                  name: 'Max',
-                  symbolOffset: [0, -5],
-                  symbolRotate: 180,
-                  type: 'max'
-                },
-                {
-                  label: {
-                    color: '#373737',
-                    textBorderColor: 'none',
-                    offset: [0, 15]
-                  },
-                  name: 'Min',
-                  symbolOffset: [0, 5],
-                  type: 'min'
-                }
-              ],
-              emphasis: {
-                disabled: true
-              },
-              itemStyle: {
-                color: '#373737'
-              },
-              symbol: 'arrow',
-              symbolSize: '10'
-            }
-          }
-        ]
+        series: []
       },
       rainfallChartOptions: {
         tooltip: {
@@ -335,23 +291,25 @@ export default {
       this.rainfallChartOptions.yAxis.name = this.rainfallUnit ? `[${this.rainfallUnit}]` : ''
     },
     renderExtensometerChart () {
-      if (!this.extensometerTimeseries || this.extensometerTimeseries.length === 0) {
+    // Check if extensometerTimeSeries is a valid array with at least one element
+      if (!this.extensometerTimeSeries || !Array.isArray(this.extensometerTimeSeries) || this.extensometerTimeSeries.length === 0) {
         console.warn('Extensometer timeseries data is empty or undefined.')
         return
       }
 
-      // Sort timeseries data for each parameter by ascending timestamp
-      const sortedData = this.extensometerTimeseries.map(timeseries => {
-        if (!timeseries.timeseries) {
-          console.warn('Timeseries data is missing for one of the zetting parameters:', timeseries)
+      // Updated sortedData computation for each series
+      const sortedData = this.extensometerTimeSeries.map((timeseriesArray, index) => {
+        if (!Array.isArray(timeseriesArray) || timeseriesArray.length === 0) {
+          console.warn(`Timeseries data is missing or invalid for zetting ${index + 1}`, timeseriesArray)
           return []
         }
-        return timeseries.timeseries
-          .map(item => [new Date(item.timestamp), item.value])
+
+        // Sort timeseries data by ascending timestamp
+        return timeseriesArray
+          .filter(item => item.timestamp && item.value !== undefined) // Filter valid entries
+          .map(item => [new Date(item.timestamp).getTime(), item.value]) // Use getTime() to ensure the timestamp is in milliseconds
           .sort((a, b) => a[0] - b[0])
       })
-
-      console.log('sortedData', this.sortedData)
 
       // Update chart options to include all six time series
       this.extensometerChartOptions.series = sortedData.map((data, index) => ({
@@ -362,40 +320,7 @@ export default {
         areaStyle: {
           color: 'rgba(0, 0, 0, 0)'
         },
-        data: data,
-        markPoint: {
-          data: [
-            {
-              label: {
-                color: '#373737',
-                textBorderColor: 'none',
-                offset: [0, -15]
-              },
-              name: 'Max',
-              symbolOffset: [0, -5],
-              symbolRotate: 180,
-              type: 'max'
-            },
-            {
-              label: {
-                color: '#373737',
-                textBorderColor: 'none',
-                offset: [0, 15]
-              },
-              name: 'Min',
-              symbolOffset: [0, 5],
-              type: 'min'
-            }
-          ],
-          emphasis: {
-            disabled: true
-          },
-          itemStyle: {
-            color: '#373737'
-          },
-          symbol: 'arrow',
-          symbolSize: '10'
-        }
+        data: data
       }))
 
       // Update y-axis name if units are available
