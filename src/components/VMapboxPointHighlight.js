@@ -21,7 +21,7 @@ export default {
         if (event.features.length === 0) return
 
         // Remove hover state from previously hovered feature, if any
-        if (hoverId) {
+        if (hoverId !== null) {
           map.removeFeatureState({
             source: 'locations',
             id: hoverId
@@ -40,6 +40,7 @@ export default {
             hover: true
           }
         )
+        console.log('hoverId', hoverId)
       })
 
       // Remove hover effect when mouse leaves the point
@@ -47,7 +48,7 @@ export default {
         map.getCanvas().style.cursor = '' // Reset cursor
 
         // Only remove hover state, do not affect selected state
-        if (hoverId) {
+        if (hoverId !== null) {
           map.setFeatureState(
             {
               source: 'locations',
@@ -60,6 +61,7 @@ export default {
         }
 
         hoverId = null
+        console.log('hoverId', hoverId)
       })
 
       // Add click event to handle point selection
@@ -69,7 +71,7 @@ export default {
         const clickedId = event.features[0].id
 
         // Remove selected state from the previously selected feature
-        if (selectedId && selectedId !== clickedId) {
+        if (selectedId !== null && selectedId !== clickedId) {
           map.setFeatureState(
             {
               source: 'locations',

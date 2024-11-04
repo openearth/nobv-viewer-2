@@ -40,6 +40,12 @@ export default new Vuex.Store({
       state.locationList = locationList
     },
     SET_LAYER_LOCATIONS (state, featureCollection) {
+      // Ensure each feature has a unique ID
+      featureCollection.features = featureCollection.features.map((feature, index) => {
+        feature.id = feature.id || index // Assign a unique ID if not present
+        return feature
+      })
+
       const pointLayer = {
         id: 'locations',
         source: {
