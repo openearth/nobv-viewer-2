@@ -12,6 +12,7 @@ export default {
     addHighlightEffect () {
       const map = this.getMap()
       let hoverId = null
+      let selectedId = null
 
       // Add hover effect when mouse enters the point
       map.on('mouseenter', 'locations', (event) => {
@@ -45,15 +46,53 @@ export default {
       map.on('mouseleave', 'locations', () => {
         map.getCanvas().style.cursor = '' // Reset cursor
 
-        // Remove hover state from the last hovered feature
+        // Only remove hover state, do not affect selected state
         if (hoverId) {
-          map.removeFeatureState({
-            source: 'locations',
-            id: hoverId
-          })
+          map.setFeatureState(
+            {
+              source: 'locations',
+              id: hoverId
+            },
+            {
+              hover: false // Only remove hover state, keep selection intact
+            }
+          )
         }
 
         hoverId = null
+      })
+
+      // Add click event to handle point selection
+      map.on('click', 'locations', (event) => {
+        if (event.features.length === 0) return
+
+        const clickedId = event.features[0].id
+
+        // Remove selected state from the previously selected feature
+        if (selectedId && selectedId !== clickedId) {
+          map.setFeatureState(
+            {
+              source: 'locations',
+              id: selectedId
+            },
+            {
+              selected: false // Reset the previous selected point
+            }
+          )
+        }
+
+        // Set the clicked feature as selected
+        selectedId = clickedId
+
+        map.setFeatureState(
+          {
+            source: 'locations',
+            id: selectedId
+          },
+          {
+            selected: true // Keep the selected state
+          }
+        )
       })
     }
   }
