@@ -48,7 +48,6 @@ export default {
   },
   data () {
     return {
-      mapCenter: [4.7505, 51.9893],
       mapZoom: 9,
       accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
       activeFunction: 'selectedArea',
@@ -101,6 +100,14 @@ export default {
     },
     styleUrl () {
       return `mapbox://styles/mapbox/${this.mapStyle}`
+    },
+    mapCenter () {
+      // Use the lat and lng from the selectedPoint to determine the map center
+      if (this.selectedPoint && this.selectedPoint.lngLat) {
+        return [this.selectedPoint.lngLat.lng, this.selectedPoint.lngLat.lat]
+      }
+      // Fallback to the default center if selectedPoint is not set
+      return [4.7505, 51.9893]
     }
   },
   watch: {
@@ -119,9 +126,9 @@ export default {
     pointSelected (value) {
       this.activeFunction = 'pointSelected'
       this.map.flyTo({
-        center: value.lngLat,
+        center: [value.lngLat.lng, value.lngLat.lat],
         padding: this.padding,
-        speed: 0.7,
+        speed: 0.8,
         zoom: 16.5
       })
     }
@@ -129,7 +136,19 @@ export default {
   methods: {
     ...mapActions(['getRainfallTimeseries', 'getExtensometerTimeseries']),
     pointClicked (e) {
-      const point = { lngLat: e.lngLat, properties: e.features[0].properties }
+      // Extract the clicked point properties from the event
+      const clickedProperties = e.features[0].properties
+      const clickedGeometry = e.features[0].geometry
+
+      // Construct a new point object using the properties of the clicked point
+      const point = {
+        lngLat: {
+          lng: clickedGeometry.coordinates[0], // Assuming `longitude` exists in the properties of the clicked point
+          lat: clickedGeometry.coordinates[1] // Assuming `latitude` exists in the properties of the clicked point
+        },
+        properties: clickedProperties
+      }
+
       this.$emit('point-clicked', point)
     }
   }

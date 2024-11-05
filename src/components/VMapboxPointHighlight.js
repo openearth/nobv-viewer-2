@@ -40,7 +40,6 @@ export default {
             hover: true
           }
         )
-        console.log('hoverId', hoverId)
       })
 
       // Remove hover effect when mouse leaves the point
@@ -61,7 +60,6 @@ export default {
         }
 
         hoverId = null
-        console.log('hoverId', hoverId)
       })
 
       // Add click event to handle point selection
