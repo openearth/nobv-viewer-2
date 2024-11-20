@@ -26,7 +26,7 @@
             center-active
             dark
           >
-            <v-tab>Zetting</v-tab>
+            <v-tab>Bodembeweging</v-tab>
             <v-tab>Regenval</v-tab>
 
             <v-tab-item style="margin: 10px">
@@ -110,6 +110,15 @@ export default {
             },
             restore: {},
             saveAsImage: {}
+          }
+        },
+        legend: {
+          type: 'scroll',
+          top: 'top',
+          orient: 'horizontal',
+          data: [],
+          lineStyle: {
+            symbol: 'none'
           }
         },
         xAxis: {
@@ -331,13 +340,16 @@ export default {
           width: 2
         },
         itemStyle: {
-          color: colors[index]
+          color: 'transparent'
         },
         areaStyle: {
           color: 'rgba(0, 0, 0, 0)'
         },
         data: data
       }))
+
+      // Populate legend data with series names
+      this.extensometerChartOptions.legend.data = sortedData.map((_, index) => `Zetting ${index + 1}`)
 
       // Update y-axis name if units are available
       this.extensometerChartOptions.yAxis.name = this.extensometerUnit ? `[${this.extensometerUnit}]` : ''
